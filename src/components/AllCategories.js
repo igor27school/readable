@@ -9,14 +9,15 @@ class AllCategories extends Component {
     if (Object.keys(this.props.categories).length === 0) {
       this.props.fetchCategoriesFromServer()
       this.props.fetchAllPostsFromServer()
-    } else if (!this.props.categories.hasAllPosts) {
+    } else if (!this.props.hasAllPosts) {
       this.props.fetchAllPostsFromServer()
     }
   }
   render() {
+    console.log(this.props.categories)
     return (
       <div>
-        {this.props.categories.map(category => (
+        {this.props.hasAllPosts && this.props.categories.map(category => (
           <Category key={category.path} category_path={category.path}/>
         ))}
       </div>
@@ -25,7 +26,7 @@ class AllCategories extends Component {
 }
 
 function mapStateToProps ({ categories }) {
-  return CategoriesHelper.getCategoriesArray(categories)
+  return CategoriesHelper.getProcessedCategories(categories)
 }
 
 function mapDispatchToProps (dispatch) {

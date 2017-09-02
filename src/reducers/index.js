@@ -17,12 +17,12 @@ function categories(state={}, action) {
       }, {})
       return {
         ...state,
-        byId: Object.keys(categorizedPosts).reduce((categories, category) => {
+        byId: Object.keys(state.byId).reduce((categories, category) => {
           categories = {
             ...categories,
             [category]: {
               ...categories[category],
-              posts: categorizedPosts[category],
+              posts: (category in categorizedPosts) ? categorizedPosts[category] : [],
             }
           }
           return categories

@@ -16,8 +16,8 @@ export const getCategories = () =>
     .then(data => data.categories)
 
 export const getAllPosts = () =>
-fetch(`${api}/posts`, { headers })
-  .then(res => res.json())
+  fetch(`${api}/posts`, { headers })
+    .then(res => res.json())
 
 export const getCategoryPosts = category_path =>
 fetch(`${api}/${category_path}/posts`, { headers })
