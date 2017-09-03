@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions'
+import { SORT_BY_TIMESTAMPS } from '../utils/Helper'
+import Sorter from './Sorter'
 import Comment from './Comment'
 
 class PostDetails extends Component {
@@ -14,7 +16,7 @@ class PostDetails extends Component {
     }
   }
   render() {
-    const { posts } = this.props
+    const { sortOrder, posts } = this.props
     const { postId } = this.props.match.params
     const post = posts.byId && posts.byId[postId]
     if (!post){
@@ -22,10 +24,12 @@ class PostDetails extends Component {
         <div>Invalid post id: {postId}</div>
       )
     }
+    const comments = sortOrder === SORT_BY_TIMESTAMPS ? post.commentsByTimestamp : post.commentsByScore
     return (
       <div>
         <h2>{post.title}<span> Score: {post.voteScore}</span></h2>
-        {post.commentsByScore && post.commentsByScore.map(commentId => (
+        <Sorter/>
+        {comments && comments.map(commentId => (
           <Comment key={commentId} commentId={commentId}/>
         ))}
       </div>
@@ -33,8 +37,8 @@ class PostDetails extends Component {
   }
 }
 
-function mapStateToProps ({ posts }) {
-  return {posts}
+function mapStateToProps ({ sortOrder, posts }) {
+  return {sortOrder, posts}
 }
 
 function mapDispatchToProps (dispatch) {
