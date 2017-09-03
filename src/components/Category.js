@@ -10,12 +10,14 @@ class Category extends Component {
     const { categoryPath } = this.props.match.params
     if (categoryPath && Object.keys(categories).length === 0) {
       // We need to fetch categories to know if the category provided is valid
-      // TODO: enforce strict order of operations
-      this.props.fetchCategoriesFromServer()
-      this.props.fetchCategoryPostsFromServer(categoryPath)
+      this.props.fetchCategoriesFromServer().then(() => this.props.fetchCategoryPostsFromServer(categoryPath))
     } else if (!('hasAllPosts' in categories) && (categoryPath in categories.byId) && !('postsByScore' in categories.byId[categoryPath])) {
-      // If we haven't fetched all posts, the category is valid and we haven't
-      // fetched this category yet, then fetch it
+      /* If:
+      * 1) We haven't fetched all posts
+      * 2) The category is valid
+      * 3) We haven't fetched this category yet
+      * then fetch it!
+      */
       this.props.fetchCategoryPostsFromServer(categoryPath)
     }
   }

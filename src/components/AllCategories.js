@@ -8,9 +8,7 @@ import PostSummary from './PostSummary'
 class AllCategories extends Component {
   componentDidMount() {
     if (Object.keys(this.props.categories).length === 0) {
-      // TODO: enforce strict order of operations
-      this.props.fetchCategoriesFromServer()
-      this.props.fetchAllPostsFromServer()
+      this.props.fetchCategoriesFromServer().then(() => this.props.fetchAllPostsFromServer())
     } else if (!this.props.hasAllPosts) {
       this.props.fetchAllPostsFromServer()
     }

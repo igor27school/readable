@@ -11,18 +11,18 @@ export const receiveCategories = categories => ({
   categories,
 })
 
-export const fetchCategoriesFromServer = () => dispatch => (
-  ServerAPI.getCategories().then(categories => dispatch(receiveCategories(categories)))
-)
+export function fetchCategoriesFromServer() {
+  return dispatch => ServerAPI.getCategories().then(categories => dispatch(receiveCategories(categories)))
+}
 
 export const receiveAllPosts = posts => ({
   type: RECEIVE_ALL_POSTS,
   posts,
 })
 
-export const fetchAllPostsFromServer = () => dispatch => (
-  ServerAPI.getAllPosts().then(posts => dispatch(receiveAllPosts(posts)))
-)
+export function fetchAllPostsFromServer() {
+  return dispatch => ServerAPI.getAllPosts().then(posts => dispatch(receiveAllPosts(posts)))
+}
 
 export const receiveCategoryPosts = (categoryPath, posts) => ({
   type: RECEIVE_CATEGORY_POSTS,
@@ -30,18 +30,18 @@ export const receiveCategoryPosts = (categoryPath, posts) => ({
   posts,
 })
 
-export const fetchCategoryPostsFromServer = (categoryPath) => dispatch => (
-  ServerAPI.getCategoryPosts(categoryPath).then(posts => dispatch(receiveCategoryPosts(categoryPath, posts)))
-)
+export function fetchCategoryPostsFromServer(categoryPath) {
+  return dispatch => ServerAPI.getCategoryPosts(categoryPath).then(posts => dispatch(receiveCategoryPosts(categoryPath, posts)))
+}
 
 export const receivePost = (post) => ({
   type: RECEIVE_POST,
   post,
 })
 
-export const fetchPostFromServer = (postId) => dispatch => (
-  ServerAPI.getPost(postId).then(post => dispatch(receivePost(post)))
-)
+export function fetchPostFromServer(postId) {
+  return dispatch => ServerAPI.getPost(postId).then(post => dispatch(receivePost(post)))
+}
 
 export const receivePostComments = (postId, comments) => ({
   type: RECEIVE_POST_COMMENTS,
@@ -49,6 +49,6 @@ export const receivePostComments = (postId, comments) => ({
   comments,
 })
 
-export const fetchPostCommentsFromServer = (postId) => dispatch => (
-  ServerAPI.getPostComments(postId).then(comments => dispatch(receivePostComments(postId, comments)))
-)
+export function fetchPostCommentsFromServer(postId) {
+  return dispatch => ServerAPI.getPostComments(postId).then(comments => dispatch(receivePostComments(postId, comments)))
+}

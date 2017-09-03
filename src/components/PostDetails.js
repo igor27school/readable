@@ -8,9 +8,7 @@ class PostDetails extends Component {
     const { posts } = this.props
     const { postId } = this.props.match.params
     if (postId && (!posts.byId || !(postId in posts.byId))) {
-      // TODO: enforce strict order of operations
-      this.props.fetchPostFromServer(postId)
-      this.props.fetchPostCommentsFromServer(postId)
+      this.props.fetchPostFromServer(postId).then(() => this.props.fetchPostCommentsFromServer(postId))
     } else if (postId && !('commentsByScore' in posts.byId[postId])) {
       this.props.fetchPostCommentsFromServer(postId)
     }
