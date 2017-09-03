@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { fetchPostFromServer } from '../actions'
+import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions'
 
 class PostSummary extends Component {
   componentDidMount() {
     const { posts, postId } = this.props
     if (postId && (!posts.byId || !(postId in posts.byId))) {
-      this.props.fetchPostFromServer(postId)
+      this.props.fetchPostFromServer(postId).then(() => this.props.fetchPostCommentsFromServer(postId))
+    } else if (postId && !('commentsByScore' in posts.byId[postId])) {
+      this.props.fetchPostCommentsFromServer(postId)
     }
   }
   render() {
@@ -22,6 +24,9 @@ class PostSummary extends Component {
       <div>
         <Link to={`/posts/${postId}`}>{post.title}</Link>
         <span> Score: {post.voteScore}</span>
+        {post.commentsByScore && post.commentsByScore.length > 0 && (
+          <span> Number of {post.commentsByScore.length === 1 ? 'comment' : 'comments'}: {post.commentsByScore.length}</span>
+        )}
       </div>
     )
   }
@@ -34,6 +39,7 @@ function mapStateToProps ({ posts }) {
 function mapDispatchToProps (dispatch) {
   return {
     fetchPostFromServer: (postId) => dispatch(fetchPostFromServer(postId)),
+    fetchPostCommentsFromServer: (postId) => dispatch(fetchPostCommentsFromServer(postId)),
   }
 }
 
