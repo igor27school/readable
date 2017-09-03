@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
-import { compare, SORT_BY_SCORES, SORT_BY_TIMESTAMPS } from '../utils/PostsHelper'
+import { compare, SORT_BY_SCORES, SORT_BY_TIMESTAMPS } from '../utils/Helper'
 import {
+  CHANGE_SORT_ORDER,
   RECEIVE_CATEGORIES,
   RECEIVE_ALL_POSTS,
   RECEIVE_CATEGORY_POSTS,
@@ -111,4 +112,13 @@ function comments(state={}, action) {
   }
 }
 
-export default combineReducers({categories, posts, comments})
+function sortOrder(state=SORT_BY_SCORES, action) {
+  switch (action.type) {
+    case CHANGE_SORT_ORDER:
+      return action.sortBy
+    default:
+      return state
+  }
+}
+
+export default combineReducers({categories, posts, comments, sortOrder})

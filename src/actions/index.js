@@ -1,10 +1,20 @@
 import * as ServerAPI from '../utils/ServerAPI'
 
+export const CHANGE_SORT_ORDER = "CHANGE_SORT_ORDER"
 export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES"
 export const RECEIVE_ALL_POSTS = "RECEIVE_ALL_POSTS"
 export const RECEIVE_CATEGORY_POSTS = "RECEIVE_CATEGORY_POSTS"
 export const RECEIVE_POST = "RECEIVE_POST"
 export const RECEIVE_POST_COMMENTS = "RECEIVE_POST_COMMENTS"
+
+export const changeSortOrder = sortBy => ({
+  type: CHANGE_SORT_ORDER,
+  sortBy,
+})
+
+export function reSort(sortBy) {
+  return dispatch => dispatch(changeSortOrder(sortBy))
+}
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,

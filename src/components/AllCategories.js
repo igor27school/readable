@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import * as CategoriesHelper from '../utils/CategoriesHelper'
-import { fetchCategoriesFromServer, fetchAllPostsFromServer } from '../actions'
+import {
+  fetchCategoriesFromServer,
+  fetchAllPostsFromServer,
+} from '../actions'
+import { SORT_BY_TIMESTAMPS } from '../utils/Helper'
+import Sorter from './Sorter'
 import PostSummary from './PostSummary'
 
 class AllCategories extends Component {
@@ -14,10 +18,13 @@ class AllCategories extends Component {
     }
   }
   render() {
+    const { sortOrder, categories, postsByScore, postsByTimestamp } = this.props
+    const posts = sortOrder === SORT_BY_TIMESTAMPS ? postsByTimestamp : postsByScore
     return (
       <div>
+        <Sorter/>
         <h2>Categories</h2>
-        {this.props.categories.map(category => (
+        {categories.map(category => (
           <div key={category.path}>
             <Link
               to={`/categories/${category.path}`}
@@ -25,7 +32,7 @@ class AllCategories extends Component {
           </div>
         ))}
         <h2>Posts</h2>
-        {this.props.postsByScore.map(postId => (
+        {posts.map(postId => (
           <PostSummary key={postId} postId={postId}/>
         ))}
       </div>
@@ -33,8 +40,16 @@ class AllCategories extends Component {
   }
 }
 
-function mapStateToProps ({ categories }) {
-  return CategoriesHelper.getProcessedCategories(categories)
+function mapStateToProps ({ sortOrder, categories }) {
+  return {
+    sortOrder,
+    hasAllPosts: ('hasAllPosts' in categories),
+    postsByScore: ('postsByScore' in categories) ? categories.postsByScore : [],
+    postsByTimestamp: ('postsByTimestamp' in categories) ? categories.postsByTimestamp : [],
+    categories: ('byId' in categories) ? Object.keys(categories.byId).map(category_path => ({
+      ...categories.byId[category_path]
+    })) : [],
+  }
 }
 
 function mapDispatchToProps (dispatch) {

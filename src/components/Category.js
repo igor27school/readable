@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { fetchCategoriesFromServer, fetchCategoryPostsFromServer } from '../actions'
+import { SORT_BY_TIMESTAMPS } from '../utils/Helper'
+import Sorter from './Sorter'
 import PostSummary from './PostSummary'
 
 class Category extends Component {
@@ -22,7 +24,7 @@ class Category extends Component {
     }
   }
   render() {
-    const { categories } = this.props
+    const { sortOrder, categories } = this.props
     const { categoryPath } = this.props.match.params
     const category = categories.byId && categories.byId[categoryPath]
     if (!category) {
@@ -30,10 +32,12 @@ class Category extends Component {
         <h4>The category {categoryPath} does not exist</h4>
       )
     }
+    const posts = sortOrder === SORT_BY_TIMESTAMPS ? category.postsByTimestamp : category.postsByScore
     return (
       <div>
         <h3>{category.name}</h3>
-        {category.postsByScore && category.postsByScore.map(postId => (
+        <Sorter/>
+        {posts && posts.map(postId => (
           <PostSummary key={postId} postId={postId}/>
         ))}
         <h4><Link to='/'>View All Categories</Link></h4>
@@ -42,8 +46,8 @@ class Category extends Component {
   }
 }
 
-function mapStateToProps ({ categories }) {
-  return {categories}
+function mapStateToProps ({ sortOrder, categories }) {
+  return {sortOrder, categories}
 }
 
 function mapDispatchToProps (dispatch) {
