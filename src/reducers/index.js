@@ -5,6 +5,7 @@ import {
   RECEIVE_ALL_POSTS,
   RECEIVE_CATEGORY_POSTS,
   RECEIVE_POST,
+  RECEIVE_POST_COMMENTS,
 } from '../actions'
 
 function categories(state={}, action) {
@@ -78,6 +79,18 @@ function posts(state={}, action) {
           [action.post.id]: action.post
         }
       }
+    case RECEIVE_POST_COMMENTS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.postId]: {
+            ...state.byId[action.postId],
+            commentsByScore: action.comments.sort(compare(SORT_BY_SCORES)).map(comment => comment.id),
+            commentsByTimestamp: action.comments.sort(compare(SORT_BY_TIMESTAMPS)).map(comment => comment.id),
+          }
+        }
+      }
     default:
       return state
   }
@@ -85,6 +98,14 @@ function posts(state={}, action) {
 
 function comments(state={}, action) {
   switch(action.type) {
+    case RECEIVE_POST_COMMENTS:
+      return {
+        ...state,
+        byId: action.comments.reduce((byId, comment) => {
+            byId[comment.id] = comment
+            return byId
+          }, state.byId ? state.byId : {}),
+      }
     default:
       return state
   }

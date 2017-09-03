@@ -5,17 +5,13 @@ import { fetchPostFromServer } from '../actions'
 
 class PostSummary extends Component {
   componentDidMount() {
-    const {match, posts} = this.props
-    const accessedDirectly = match && match.params && match.params.post_id
-    const postId = accessedDirectly ? match.params.post_id : this.props.postId
+    const { posts, postId } = this.props
     if (postId && (!posts.byId || !(postId in posts.byId))) {
       this.props.fetchPostFromServer(postId)
     }
   }
   render() {
-    const {match, posts} = this.props
-    const accessedDirectly = match && match.params && match.params.post_id
-    const postId = accessedDirectly ? match.params.post_id : this.props.postId
+    const { posts, postId } = this.props
     const post = posts.byId[postId]
     if (!post){
       return (
@@ -37,7 +33,7 @@ function mapStateToProps ({ posts }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchPostFromServer: (post_id) => dispatch(fetchPostFromServer(post_id)),
+    fetchPostFromServer: (postId) => dispatch(fetchPostFromServer(postId)),
   }
 }
 

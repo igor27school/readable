@@ -4,6 +4,7 @@ export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES"
 export const RECEIVE_ALL_POSTS = "RECEIVE_ALL_POSTS"
 export const RECEIVE_CATEGORY_POSTS = "RECEIVE_CATEGORY_POSTS"
 export const RECEIVE_POST = "RECEIVE_POST"
+export const RECEIVE_POST_COMMENTS = "RECEIVE_POST_COMMENTS"
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
@@ -40,4 +41,14 @@ export const receivePost = (post) => ({
 
 export const fetchPostFromServer = (postId) => dispatch => (
   ServerAPI.getPost(postId).then(post => dispatch(receivePost(post)))
+)
+
+export const receivePostComments = (postId, comments) => ({
+  type: RECEIVE_POST_COMMENTS,
+  postId,
+  comments,
+})
+
+export const fetchPostCommentsFromServer = (postId) => dispatch => (
+  ServerAPI.getPostComments(postId).then(comments => dispatch(receivePostComments(postId, comments)))
 )
