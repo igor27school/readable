@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import * as CategoriesHelper from '../utils/CategoriesHelper'
 import { fetchCategoriesFromServer, fetchAllPostsFromServer } from '../actions'
-import Category from './Category'
+import PostSummary from './PostSummary'
 
 class AllCategories extends Component {
   componentDidMount() {
@@ -14,11 +15,19 @@ class AllCategories extends Component {
     }
   }
   render() {
-    console.log(this.props.categories)
     return (
       <div>
-        {this.props.hasAllPosts && this.props.categories.map(category => (
-          <Category key={category.path} category_path={category.path}/>
+        <h2>Categories</h2>
+        {this.props.categories.map(category => (
+          <div key={category.path}>
+            <Link
+              to={`/categories/${category.path}`}
+            >{category.name}</Link>
+          </div>
+        ))}
+        <h2>Posts</h2>
+        {this.props.postsByScore.map(postId => (
+          <PostSummary key={postId} postId={postId}/>
         ))}
       </div>
     )

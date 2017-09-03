@@ -3,6 +3,7 @@ import * as ServerAPI from '../utils/ServerAPI'
 export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES"
 export const RECEIVE_ALL_POSTS = "RECEIVE_ALL_POSTS"
 export const RECEIVE_CATEGORY_POSTS = "RECEIVE_CATEGORY_POSTS"
+export const RECEIVE_POST = "RECEIVE_POST"
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
@@ -22,12 +23,21 @@ export const fetchAllPostsFromServer = () => dispatch => (
   ServerAPI.getAllPosts().then(posts => dispatch(receiveAllPosts(posts)))
 )
 
-export const receiveCategoryPosts = (category_path, posts) => ({
+export const receiveCategoryPosts = (categoryPath, posts) => ({
   type: RECEIVE_CATEGORY_POSTS,
-  category_path,
+  categoryPath,
   posts,
 })
 
-export const fetchCategoryPostsFromServer = (category_path) => dispatch => (
-  ServerAPI.getCategoryPosts(category_path).then(posts => dispatch(receiveCategoryPosts(category_path, posts)))
+export const fetchCategoryPostsFromServer = (categoryPath) => dispatch => (
+  ServerAPI.getCategoryPosts(categoryPath).then(posts => dispatch(receiveCategoryPosts(categoryPath, posts)))
+)
+
+export const receivePost = (post) => ({
+  type: RECEIVE_POST,
+  post,
+})
+
+export const fetchPostFromServer = (postId) => dispatch => (
+  ServerAPI.getPost(postId).then(post => dispatch(receivePost(post)))
 )

@@ -19,6 +19,10 @@ export const getAllPosts = () =>
   fetch(`${api}/posts`, { headers })
     .then(res => res.json())
 
-export const getCategoryPosts = category_path =>
-fetch(`${api}/${category_path}/posts`, { headers })
-  .then(res => res.json())
+export const getCategoryPosts = categoryPath =>
+  fetch(`${api}/${categoryPath}/posts`, { headers })
+    .then(res => res.json())
+
+export const getPost = postId =>
+  fetch(`${api}/posts/{postId}`, { headers })
+    .then(res => res.json())

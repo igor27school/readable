@@ -9,8 +9,8 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={AllCategories}/>
-        <Route path="/category/:category_path" component={Category}/>
-        <Route path="/post/:post_id" component={PostDetails}/>
+        <Route path="/categories/:categoryPath" component={Category}/>
+        <Route path="/posts/:postId" component={PostDetails}/>
       </Switch>
     )
   }

@@ -1,5 +1,11 @@
 import { combineReducers } from 'redux'
-import { RECEIVE_CATEGORIES, RECEIVE_ALL_POSTS, RECEIVE_CATEGORY_POSTS } from '../actions'
+import { compare, SORT_BY_SCORES, SORT_BY_TIMESTAMPS } from '../utils/PostsHelper'
+import {
+  RECEIVE_CATEGORIES,
+  RECEIVE_ALL_POSTS,
+  RECEIVE_CATEGORY_POSTS,
+  RECEIVE_POST,
+} from '../actions'
 
 function categories(state={}, action) {
   switch(action.type) {
@@ -12,17 +18,20 @@ function categories(state={}, action) {
       }
     case RECEIVE_ALL_POSTS:
       const categorizedPosts = action.posts.reduce((categories, post) => {
-        categories[post.category] = categories[post.category] ? categories[post.category].concat(post.id): [post.id]
+        categories[post.category] = categories[post.category] ? categories[post.category].concat(post): [post]
         return categories
       }, {})
       return {
         ...state,
+        postsByScore: action.posts.sort(compare(SORT_BY_SCORES)).map(post => post.id),
+        postsByTimestamp: action.posts.sort(compare(SORT_BY_TIMESTAMPS)).map(post => post.id),
         byId: Object.keys(state.byId).reduce((categories, category) => {
           categories = {
             ...categories,
             [category]: {
               ...categories[category],
-              posts: (category in categorizedPosts) ? categorizedPosts[category] : [],
+              postsByScore: (category in categorizedPosts) ? categorizedPosts[category].sort(compare(SORT_BY_SCORES)).map(post => post.id) : [],
+              postsByTimestamp: (category in categorizedPosts) ? categorizedPosts[category].sort(compare(SORT_BY_TIMESTAMPS)).map(post => post.id) : [],
             }
           }
           return categories
@@ -31,16 +40,17 @@ function categories(state={}, action) {
       }
     case RECEIVE_CATEGORY_POSTS:
       // If the provided category is not one of the categories, ignore it
-      if (!state.byId[action.category_path]) {
+      if (!state.byId[action.categoryPath]) {
         return state
       }
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.category_path]: {
-            ...state.byId[action.category_path],
-            posts: action.posts.map(post => post.id)
+          [action.categoryPath]: {
+            ...state.byId[action.categoryPath],
+            postsByScore: action.posts.sort(compare(SORT_BY_SCORES)).map(post => post.id),
+            postsByTimestamp: action.posts.sort(compare(SORT_BY_TIMESTAMPS)).map(post => post.id),
           }
         }
       }
@@ -53,13 +63,31 @@ function posts(state={}, action) {
   switch(action.type) {
     case RECEIVE_ALL_POSTS:
     case RECEIVE_CATEGORY_POSTS:
-      return action.posts.reduce((state, post) => {
-        state[post.id] = post
-        return state
-      }, state)
+      return {
+        ...state,
+        byId: action.posts.reduce((byId, post) => {
+            byId[post.id] = post
+            return byId
+          }, state.byId ? state.byId : {})
+      }
+    case RECEIVE_POST:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.id]: action.post
+        }
+      }
     default:
       return state
   }
 }
 
-export default combineReducers({categories, posts})
+function comments(state={}, action) {
+  switch(action.type) {
+    default:
+      return state
+  }
+}
+
+export default combineReducers({categories, posts, comments})
