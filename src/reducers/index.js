@@ -1,5 +1,12 @@
 import { combineReducers } from 'redux'
-import { compare, SORT_BY_SCORES, SORT_BY_TIMESTAMPS } from '../utils/Helper'
+import {
+  compare,
+  SORT_BY_SCORES,
+  SORT_BY_TIMESTAMPS,
+  POST_TYPE,
+  COMMENT_TYPE,
+  VOTE_UP,
+} from '../utils/Helper'
 import {
   CHANGE_SORT_ORDER,
   RECEIVE_CATEGORIES,
@@ -7,6 +14,7 @@ import {
   RECEIVE_CATEGORY_POSTS,
   RECEIVE_POST,
   RECEIVE_POST_COMMENTS,
+  RECEIVE_VOTE,
 } from '../actions'
 
 function categories(state={}, action) {
@@ -92,6 +100,20 @@ function posts(state={}, action) {
           }
         }
       }
+    case RECEIVE_VOTE:
+      if (action.componentType !== POST_TYPE) {
+        return state
+      }
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.id]: {
+            ...state.byId[action.id],
+            voteScore: action.voteType === VOTE_UP ? state.byId[action.id].voteScore + 1 : state.byId[action.id].voteScore - 1,
+          }
+        }
+      }
     default:
       return state
   }
@@ -106,6 +128,20 @@ function comments(state={}, action) {
             byId[comment.id] = comment
             return byId
           }, state.byId ? state.byId : {}),
+      }
+    case RECEIVE_VOTE:
+      if (action.componentType !== COMMENT_TYPE) {
+        return state
+      }
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.id]: {
+            ...state.byId[action.id],
+            voteScore: action.voteType === VOTE_UP ? state.byId[action.id].voteScore + 1 : state.byId[action.id].voteScore - 1,
+          }
+        }
       }
     default:
       return state

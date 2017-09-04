@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { POST_TYPE } from '../utils/Helper'
 import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions'
+import Voter from './Voter'
 
 class PostSummary extends Component {
   componentDidMount() {
@@ -27,6 +29,7 @@ class PostSummary extends Component {
         {post.commentsByScore && post.commentsByScore.length > 0 && (
           <span> Number of {post.commentsByScore.length === 1 ? 'comment' : 'comments'}: {post.commentsByScore.length}</span>
         )}
+        <Voter componentType={POST_TYPE} id={postId}/>
       </div>
     )
   }

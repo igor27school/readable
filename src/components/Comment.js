@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { COMMENT_TYPE } from '../utils/Helper'
+import Voter from './Voter'
 
 class Comment extends Component {
   render() {
@@ -11,7 +13,10 @@ class Comment extends Component {
       )
     }
     return (
-      <div>{comment.body}</div>
+      <div>
+        <h4>{comment.body}<span> Score: {comment.voteScore}</span></h4>
+        <Voter componentType={COMMENT_TYPE} id={commentId}/>
+      </div>
     )
   }
 }

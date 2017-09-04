@@ -1,3 +1,5 @@
+import { POST_TYPE, VOTE_UP } from '../utils/Helper'
+
 const api = process.env.REACT_APP_READABLE_API_URL || 'http://localhost:5001'
 
 let token = localStorage.token
@@ -30,3 +32,15 @@ export const getPost = postId =>
 export const getPostComments = postId =>
   fetch(`${api}/posts/${postId}/comments`, { headers })
     .then(res => res.json())
+
+export const sendVote = (componentType, id, voteType) => {
+  const component = componentType === POST_TYPE ? 'posts' : 'comments'
+  return fetch(`${api}/${component}/${id}`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({option: voteType === VOTE_UP ? 'upVote' : 'downVote'})
+  }).then(res => res.json())
+}
