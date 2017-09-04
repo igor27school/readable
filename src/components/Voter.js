@@ -7,10 +7,10 @@ class Voter extends Component {
   render() {
     const {componentType, id, vote} = this.props
     return (
-      <div>
+      <span>
         <button onClick={(event) => vote(componentType, id, VOTE_UP)}>UPVOTE</button>
         <button onClick={(event) => vote(componentType, id, VOTE_DOWN)}>DOWNVOTE</button>
-      </div>
+      </span>
     )
   }
 }

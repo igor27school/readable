@@ -14,8 +14,10 @@ class Comment extends Component {
     }
     return (
       <div>
-        <h4>{comment.body}<span> Score: {comment.voteScore}</span></h4>
-        <Voter componentType={COMMENT_TYPE} id={commentId}/>
+        <h4>{comment.body}
+          <span> Score: {comment.voteScore}</span>
+          <Voter componentType={COMMENT_TYPE} id={commentId}/>
+        </h4>
       </div>
     )
   }

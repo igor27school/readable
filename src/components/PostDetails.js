@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions'
 import { SORT_BY_TIMESTAMPS, POST_TYPE } from '../utils/Helper'
 import Sorter from './Sorter'
@@ -39,6 +40,7 @@ class PostDetails extends Component {
         {comments && comments.map(commentId => (
           <Comment key={commentId} commentId={commentId}/>
         ))}
+        <h4><Link to='/'>View All Categories</Link></h4>
       </div>
     )
   }
