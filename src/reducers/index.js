@@ -76,7 +76,7 @@ function categories(state={}, action) {
           ...state.byId,
           [categoryPath]: {
             ...state.byId[categoryPath],
-            posts: state.byId[categoryPath].posts.concat([action.post.id]),
+            posts: state.byId[categoryPath].posts ? state.byId[categoryPath].posts.concat([action.post.id]) : [action.post.id],
           }
         }
       }
@@ -128,7 +128,7 @@ function posts(state={}, action) {
         }
       }
     case RECEIVE_VOTE:
-      if (action.componentType !== POST_TYPE) {
+      if (action.objectType !== POST_TYPE) {
         return state
       }
       return {
@@ -193,7 +193,7 @@ function comments(state={}, action) {
           }, state.byId ? state.byId : {}),
       }
     case RECEIVE_VOTE:
-      if (action.componentType !== COMMENT_TYPE) {
+      if (action.objectType !== COMMENT_TYPE) {
         return state
       }
       return {

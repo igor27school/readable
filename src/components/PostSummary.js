@@ -35,7 +35,7 @@ class PostSummary extends Component {
         {post.comments && post.comments.length > 0 && (
           <span> Number of {post.comments.length === 1 ? 'comment' : 'comments'}: {post.comments.length}</span>
         )}
-        <Voter componentType={POST_TYPE} id={postId}/>
+        <Voter objectType={POST_TYPE} id={postId}/>
       </div>
     )
   }

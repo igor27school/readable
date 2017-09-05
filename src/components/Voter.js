@@ -5,11 +5,11 @@ import { vote } from '../actions'
 
 class Voter extends Component {
   render() {
-    const {componentType, id, vote} = this.props
+    const {objectType, id, vote} = this.props
     return (
       <span>
-        <button onClick={(event) => vote(componentType, id, VOTE_UP)}>UPVOTE</button>
-        <button onClick={(event) => vote(componentType, id, VOTE_DOWN)}>DOWNVOTE</button>
+        <button onClick={(event) => vote(objectType, id, VOTE_UP)}>UPVOTE</button>
+        <button onClick={(event) => vote(objectType, id, VOTE_DOWN)}>DOWNVOTE</button>
       </span>
     )
   }
@@ -17,7 +17,7 @@ class Voter extends Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-    vote: (componentType, id, voteType) => dispatch(vote(componentType, id, voteType)),
+    vote: (objectType, id, voteType) => dispatch(vote(objectType, id, voteType)),
   }
 }
 

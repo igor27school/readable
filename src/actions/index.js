@@ -68,15 +68,15 @@ export function fetchPostCommentsFromServer(postId) {
   return dispatch => ServerAPI.getPostComments(postId).then(comments => dispatch(receivePostComments(postId, comments)))
 }
 
-const receiveVote = (componentType, id, voteType) => ({
+const receiveVote = (objectType, id, voteType) => ({
   type: RECEIVE_VOTE,
-  componentType,
+  objectType,
   id,
   voteType,
 })
 
-export function vote(componentType, id, voteType) {
-  return dispatch => ServerAPI.sendVote(componentType, id, voteType).then(() => dispatch(receiveVote(componentType, id, voteType)))
+export function vote(objectType, id, voteType) {
+  return dispatch => ServerAPI.sendVote(objectType, id, voteType).then(() => dispatch(receiveVote(objectType, id, voteType)))
 }
 
 const addPost = post => ({

@@ -35,10 +35,10 @@ class PostDetails extends Component {
     return (
       <div>
         <h2>
-          <Deleter objectType={POST_TYPE} id={postId}/>
+          <Deleter objectType={POST_TYPE} id={postId} history={this.props.history}/>
           <span> {post.title}</span>
           <span> Score: {post.voteScore}</span>
-          <Voter componentType={POST_TYPE} id={postId}/>
+          <Voter objectType={POST_TYPE} id={postId}/>
         </h2>
         <h3>{post.body}</h3>
         <h3>{post.author}</h3>

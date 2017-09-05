@@ -23,7 +23,7 @@ class Comment extends Component {
         <span>{comment.author}</span>
         <span> {comment.body}</span>
         <span> Score: {comment.voteScore}</span>
-        <Voter componentType={COMMENT_TYPE} id={commentId}/>
+        <Voter objectType={COMMENT_TYPE} id={commentId}/>
       </h4>
     )
   }

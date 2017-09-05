@@ -4,8 +4,11 @@ import { deleteObject } from '../actions'
 
 class Deleter extends Component {
   handleClick = () => {
-    const {objectType, id, deleteObject} = this.props
+    const {objectType, id, deleteObject, history} = this.props
     deleteObject(objectType, id)
+    if (history) {
+      history.push('/')
+    }
   }
   render() {
     return (
