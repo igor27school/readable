@@ -72,3 +72,27 @@ export const deleteObject = (objectType, id) => {
     headers
   })
 }
+
+export const getComment = commentId =>
+  fetch(`${api}/comments/${commentId}`, { headers })
+    .then(res => res.json())
+
+export const editComment = (commentId, comment) =>
+  fetch(`${api}/comments/${commentId}`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(comment)
+  }).then(res => res.json())
+
+export const editPost = (postId, post) =>
+  fetch(`${api}/posts/${postId}`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(post)
+  }).then(res => res.json())

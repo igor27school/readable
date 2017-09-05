@@ -14,8 +14,11 @@ import {
   RECEIVE_POST_COMMENTS,
   RECEIVE_VOTE,
   ADD_COMMENT,
+  RECEIVE_COMMENT,
   ADD_POST,
   REMOVE_OBJECT,
+  MODIFY_POST,
+  MODIFY_COMMENT,
 } from '../actions'
 
 function initializedIfNeededState(state) {
@@ -97,21 +100,20 @@ function posts(state={}, action) {
         return state
       }, state.byId ? state : {byId: {}, allIds:[]})
     case RECEIVE_POST:
+    case ADD_POST:
+    case MODIFY_POST:
       if (!action.post.id) {
         return state
       }
       state = initializedIfNeededState(state)
-      if (!(action.post.id in state.byId)) {
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [action.post.id]: action.post
-          },
-          allIds: state.allIds.concat([action.post.id]),
-        }
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.id]: action.post
+        },
+        allIds: state.allIds.includes(action.post.id) ? state.allIds : state.allIds.concat([action.post.id])
       }
-      return state
     case RECEIVE_POST_COMMENTS:
       state = initializedIfNeededState(state)
       if (!(action.postId in state.byId)) {
@@ -141,17 +143,8 @@ function posts(state={}, action) {
           }
         }
       }
-    case ADD_POST:
-      state = initializedIfNeededState(state)
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.post.id]: action.post
-        },
-        allIds: state.allIds.concat([action.post.id])
-      }
     case ADD_COMMENT:
+    case RECEIVE_COMMENT:
       state = initializedIfNeededState(state)
       return {
         ...state,
@@ -207,6 +200,8 @@ function comments(state={}, action) {
         }
       }
     case ADD_COMMENT:
+    case RECEIVE_COMMENT:
+    case MODIFY_COMMENT:
       return {
         ...state,
         byId: {

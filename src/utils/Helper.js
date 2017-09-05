@@ -23,18 +23,28 @@ export const compare = sortBy => (a, b) => {
 }
 
 export const buildComment = (parentPostId, {author, body}) => ({
-    id: uuid(),
-    timestamp: Date.now(),
-    author,
-    body,
-    parentId: parentPostId,
-  })
+  id: uuid(),
+  timestamp: Date.now(),
+  author,
+  body,
+  parentId: parentPostId,
+})
 
 export const buildPost = ({title, author, body, category}) => ({
-    id: uuid(),
-    timestamp: Date.now(),
-    title,
-    author,
-    body,
-    category,
-  })
+  id: uuid(),
+  timestamp: Date.now(),
+  title,
+  author,
+  body,
+  category,
+})
+
+export const buildEditComment = ({body}) => ({
+  timestamp: Date.now(),
+  body,
+})
+
+export const buildEditPost = ({title, body}) => ({
+  title,
+  body,
+})

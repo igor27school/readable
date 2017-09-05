@@ -1,5 +1,5 @@
 import * as ServerAPI from '../utils/ServerAPI'
-import { buildComment, buildPost } from '../utils/Helper'
+import { buildComment, buildPost, buildEditComment, buildEditPost } from '../utils/Helper'
 
 export const CHANGE_SORT_ORDER = "CHANGE_SORT_ORDER"
 export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES"
@@ -11,6 +11,9 @@ export const RECEIVE_VOTE = "RECEIVE_VOTE"
 export const ADD_POST = "ADD_POST"
 export const ADD_COMMENT = "ADD_COMMENT"
 export const REMOVE_OBJECT = "REMOVE_OBJECT"
+export const RECEIVE_COMMENT = "RECEIVE_COMMENT"
+export const MODIFY_COMMENT = "MODIFY_COMMENT"
+export const MODIFY_POST = "MODIFY_POST"
 
 const changeSortOrder = sortBy => ({
   type: CHANGE_SORT_ORDER,
@@ -107,4 +110,33 @@ const removeObject = (objectType, id) => ({
 
 export function deleteObject(objectType, id) {
   return dispatch => ServerAPI.deleteObject(objectType, id).then(() => dispatch(removeObject(objectType, id)))
+}
+
+const receiveComment = comment => ({
+  type: RECEIVE_COMMENT,
+  comment,
+})
+
+export function fetchCommentFromServer(commentId) {
+  return dispatch => ServerAPI.getComment(commentId).then(comment => dispatch(receiveComment(comment)))
+}
+
+const modifyComment = comment => ({
+  type: MODIFY_COMMENT,
+  comment,
+})
+
+export function editComment(commentId, values) {
+  const comment = buildEditComment(values)
+  return dispatch => ServerAPI.editComment(commentId, comment).then(editedComment => dispatch(modifyComment(editedComment)))
+}
+
+const modifyPost = post => ({
+  type: MODIFY_POST,
+  post,
+})
+
+export function editPost(postId, values) {
+  const post = buildEditPost(values)
+  return dispatch => ServerAPI.editPost(postId, post).then(editedPost => dispatch(modifyPost(editedPost)))
 }

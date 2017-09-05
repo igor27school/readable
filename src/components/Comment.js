@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { COMMENT_TYPE } from '../utils/Helper'
 import Voter from './Voter'
 import Deleter from './Deleter'
@@ -20,7 +21,8 @@ class Comment extends Component {
     return (
       <h4>
         <Deleter objectType={COMMENT_TYPE} id={commentId}/>
-        <span>{comment.author}</span>
+        <Link to={`/edit/comments/${comment.id}`}>Edit</Link>
+        <span> {comment.author}</span>
         <span> {comment.body}</span>
         <span> Score: {comment.voteScore}</span>
         <Voter objectType={COMMENT_TYPE} id={commentId}/>

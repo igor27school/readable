@@ -30,6 +30,7 @@ class PostSummary extends Component {
     return (
       <div>
         <Deleter objectType={POST_TYPE} id={postId}/>
+        <Link to={`/edit/posts/${post.id}`}>Edit</Link>
         <Link to={`/posts/${postId}`}>{post.title}</Link>
         <span> Score: {post.voteScore}</span>
         {post.comments && post.comments.length > 0 && (

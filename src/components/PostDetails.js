@@ -35,7 +35,12 @@ class PostDetails extends Component {
     return (
       <div>
         <h2>
-          <Deleter objectType={POST_TYPE} id={postId} history={this.props.history}/>
+          <Deleter
+            objectType={POST_TYPE}
+            id={postId}
+            history={this.props.history}
+          />
+          <Link to={`/edit/posts/${post.id}`}>Edit</Link>
           <span> {post.title}</span>
           <span> Score: {post.voteScore}</span>
           <Voter objectType={POST_TYPE} id={postId}/>
