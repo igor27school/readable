@@ -48,6 +48,9 @@ class PostDetails extends Component {
         <h3>{post.body}</h3>
         <h3>{post.author}</h3>
         <h3>{(new Date(post.timestamp)).toString()}</h3>
+        {post.comments && post.comments.length > 0 && (
+          <h3> Number of {post.comments.length === 1 ? 'comment' : 'comments'}: {post.comments.length}</h3>
+        )}
         <Sorter/>
         {commentIds.map(commentId => (
           <Comment key={commentId} commentId={commentId}/>
