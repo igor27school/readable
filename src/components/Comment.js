@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { COMMENT_TYPE } from '../utils/Helper'
 import Voter from './Voter'
+import Deleter from './Deleter'
 
 class Comment extends Component {
   render() {
@@ -11,14 +12,19 @@ class Comment extends Component {
       return (
         <div>Invalid comment id: {commentId}</div>
       )
+    } else if (comment.deleted) {
+      return (
+        <div>This comment has been deleted: {commentId}</div>
+      )
     }
     return (
-      <div>
-        <h4>{comment.body}
-          <span> Score: {comment.voteScore}</span>
-          <Voter componentType={COMMENT_TYPE} id={commentId}/>
-        </h4>
-      </div>
+      <h4>
+        <Deleter objectType={COMMENT_TYPE} id={commentId}/>
+        <span>{comment.author}</span>
+        <span> {comment.body}</span>
+        <span> Score: {comment.voteScore}</span>
+        <Voter componentType={COMMENT_TYPE} id={commentId}/>
+      </h4>
     )
   }
 }

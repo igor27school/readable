@@ -5,7 +5,7 @@ import {
   fetchCategoriesFromServer,
   fetchAllPostsFromServer,
 } from '../actions'
-import { SORT_BY_TIMESTAMPS } from '../utils/Helper'
+import { compare } from '../utils/Helper'
 import Sorter from './Sorter'
 import PostSummary from './PostSummary'
 
@@ -18,8 +18,7 @@ class AllCategories extends Component {
     }
   }
   render() {
-    const { sortOrder, categories, postsByScore, postsByTimestamp } = this.props
-    const posts = sortOrder === SORT_BY_TIMESTAMPS ? postsByTimestamp : postsByScore
+    const { categories, posts } = this.props
     return (
       <div>
         <Sorter/>
@@ -35,20 +34,17 @@ class AllCategories extends Component {
         {posts.map(postId => (
           <PostSummary key={postId} postId={postId}/>
         ))}
+        <h4><Link to='/create'>New Post</Link></h4>
       </div>
     )
   }
 }
 
-function mapStateToProps ({ sortOrder, categories }) {
+function mapStateToProps ({ sortOrder, categories, posts }) {
   return {
-    sortOrder,
     hasAllPosts: ('hasAllPosts' in categories),
-    postsByScore: ('postsByScore' in categories) ? categories.postsByScore : [],
-    postsByTimestamp: ('postsByTimestamp' in categories) ? categories.postsByTimestamp : [],
-    categories: ('byId' in categories) ? Object.keys(categories.byId).map(category_path => ({
-      ...categories.byId[category_path]
-    })) : [],
+    categories: ('byId' in categories) ? Object.keys(categories.byId).map(category_path => categories.byId[category_path]) : [],
+    posts: posts.allIds ? posts.allIds.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id) : [],
   }
 }
 

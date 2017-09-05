@@ -44,3 +44,31 @@ export const sendVote = (componentType, id, voteType) => {
     body: JSON.stringify({option: voteType === VOTE_UP ? 'upVote' : 'downVote'})
   }).then(res => res.json())
 }
+
+export const createComment = (comment) =>
+  fetch(`${api}/comments`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(comment)
+  }).then(res => res.json())
+
+export const createPost = (post) =>
+  fetch(`${api}/posts`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(post)
+  }).then(res => res.json())
+
+export const deleteObject = (objectType, id) => {
+  const objectStr = objectType === POST_TYPE ? 'posts' : 'comments'
+  return fetch(`${api}/${objectStr}/${id}`, {
+    method: 'DELETE',
+    headers
+  })
+}

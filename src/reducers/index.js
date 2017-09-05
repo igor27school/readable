@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux'
 import {
-  compare,
   SORT_BY_SCORES,
-  SORT_BY_TIMESTAMPS,
   POST_TYPE,
   COMMENT_TYPE,
   VOTE_UP,
@@ -15,7 +13,17 @@ import {
   RECEIVE_POST,
   RECEIVE_POST_COMMENTS,
   RECEIVE_VOTE,
+  ADD_COMMENT,
+  ADD_POST,
+  REMOVE_OBJECT,
 } from '../actions'
+
+function initializedIfNeededState(state) {
+  return state.byId ? state : {
+    byId: {},
+    allIds: [],
+  }
+}
 
 function categories(state={}, action) {
   switch(action.type) {
@@ -28,20 +36,17 @@ function categories(state={}, action) {
       }
     case RECEIVE_ALL_POSTS:
       const categorizedPosts = action.posts.reduce((categories, post) => {
-        categories[post.category] = categories[post.category] ? categories[post.category].concat(post): [post]
+        categories[post.category] = categories[post.category] ? categories[post.category].concat([post]): [post]
         return categories
       }, {})
       return {
         ...state,
-        postsByScore: action.posts.sort(compare(SORT_BY_SCORES)).map(post => post.id),
-        postsByTimestamp: action.posts.sort(compare(SORT_BY_TIMESTAMPS)).map(post => post.id),
         byId: Object.keys(state.byId).reduce((categories, category) => {
           categories = {
             ...categories,
             [category]: {
               ...categories[category],
-              postsByScore: (category in categorizedPosts) ? categorizedPosts[category].sort(compare(SORT_BY_SCORES)).map(post => post.id) : [],
-              postsByTimestamp: (category in categorizedPosts) ? categorizedPosts[category].sort(compare(SORT_BY_TIMESTAMPS)).map(post => post.id) : [],
+              posts: (category in categorizedPosts) ? categorizedPosts[category].map(post => post.id) : [],
             }
           }
           return categories
@@ -59,8 +64,19 @@ function categories(state={}, action) {
           ...state.byId,
           [action.categoryPath]: {
             ...state.byId[action.categoryPath],
-            postsByScore: action.posts.sort(compare(SORT_BY_SCORES)).map(post => post.id),
-            postsByTimestamp: action.posts.sort(compare(SORT_BY_TIMESTAMPS)).map(post => post.id),
+            posts: action.posts.map(post => post.id),
+          }
+        }
+      }
+    case ADD_POST:
+      const categoryPath = action.post.category
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [categoryPath]: {
+            ...state.byId[categoryPath],
+            posts: state.byId[categoryPath].posts.concat([action.post.id]),
           }
         }
       }
@@ -73,30 +89,41 @@ function posts(state={}, action) {
   switch(action.type) {
     case RECEIVE_ALL_POSTS:
     case RECEIVE_CATEGORY_POSTS:
-      return {
-        ...state,
-        byId: action.posts.reduce((byId, post) => {
-            byId[post.id] = post
-            return byId
-          }, state.byId ? state.byId : {})
-      }
+      return action.posts.reduce((state, post) => {
+        if (!(post.id in state.byId)) {
+          state.byId[post.id] = post
+          state.allIds = state.allIds.concat([post.id])
+        }
+        return state
+      }, state.byId ? state : {byId: {}, allIds:[]})
     case RECEIVE_POST:
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.post.id]: action.post
+      if (!action.post.id) {
+        return state
+      }
+      state = initializedIfNeededState(state)
+      if (!(action.post.id in state.byId)) {
+        return {
+          ...state,
+          byId: {
+            ...state.byId,
+            [action.post.id]: action.post
+          },
+          allIds: state.allIds.concat([action.post.id]),
         }
       }
+      return state
     case RECEIVE_POST_COMMENTS:
+      state = initializedIfNeededState(state)
+      if (!(action.postId in state.byId)) {
+        return state
+      }
       return {
         ...state,
         byId: {
           ...state.byId,
           [action.postId]: {
             ...state.byId[action.postId],
-            commentsByScore: action.comments.sort(compare(SORT_BY_SCORES)).map(comment => comment.id),
-            commentsByTimestamp: action.comments.sort(compare(SORT_BY_TIMESTAMPS)).map(comment => comment.id),
+            comments: action.comments.map(comment => comment.id),
           }
         }
       }
@@ -114,6 +141,42 @@ function posts(state={}, action) {
           }
         }
       }
+    case ADD_POST:
+      state = initializedIfNeededState(state)
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.id]: action.post
+        },
+        allIds: state.allIds.concat([action.post.id])
+      }
+    case ADD_COMMENT:
+      state = initializedIfNeededState(state)
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.comment.parentId]: {
+            ...state.byId[action.comment.parentId],
+            comments: state.byId[action.comment.parentId].comments.concat([action.comment.id]),
+          }
+        },
+      }
+    case REMOVE_OBJECT:
+    if (action.objectType !== POST_TYPE) {
+      return state
+    }
+    return {
+      ...state,
+      byId: {
+        ...state.byId,
+        [action.id]: {
+          ...state.byId[action.id],
+          deleted: true,
+        }
+      },
+    }
     default:
       return state
   }
@@ -142,6 +205,28 @@ function comments(state={}, action) {
             voteScore: action.voteType === VOTE_UP ? state.byId[action.id].voteScore + 1 : state.byId[action.id].voteScore - 1,
           }
         }
+      }
+    case ADD_COMMENT:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.comment.id]: action.comment
+        }
+      }
+    case REMOVE_OBJECT:
+      if (action.objectType !== COMMENT_TYPE) {
+        return state
+      }
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.id]: {
+            ...state.byId[action.id],
+            deleted: true,
+          }
+        },
       }
     default:
       return state

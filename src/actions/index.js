@@ -1,4 +1,5 @@
 import * as ServerAPI from '../utils/ServerAPI'
+import { buildComment, buildPost } from '../utils/Helper'
 
 export const CHANGE_SORT_ORDER = "CHANGE_SORT_ORDER"
 export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES"
@@ -7,6 +8,9 @@ export const RECEIVE_CATEGORY_POSTS = "RECEIVE_CATEGORY_POSTS"
 export const RECEIVE_POST = "RECEIVE_POST"
 export const RECEIVE_POST_COMMENTS = "RECEIVE_POST_COMMENTS"
 export const RECEIVE_VOTE = "RECEIVE_VOTE"
+export const ADD_POST = "ADD_POST"
+export const ADD_COMMENT = "ADD_COMMENT"
+export const REMOVE_OBJECT = "REMOVE_OBJECT"
 
 const changeSortOrder = sortBy => ({
   type: CHANGE_SORT_ORDER,
@@ -73,4 +77,34 @@ const receiveVote = (componentType, id, voteType) => ({
 
 export function vote(componentType, id, voteType) {
   return dispatch => ServerAPI.sendVote(componentType, id, voteType).then(() => dispatch(receiveVote(componentType, id, voteType)))
+}
+
+const addPost = post => ({
+  type: ADD_POST,
+  post,
+})
+
+export function createPost(values) {
+  const post = buildPost(values)
+  return dispatch => ServerAPI.createPost(post).then(createdPost => dispatch(addPost(createdPost)))
+}
+
+const addComment = comment => ({
+  type: ADD_COMMENT,
+  comment,
+})
+
+export function createComment(parentPostId, values) {
+  const comment = buildComment(parentPostId, values)
+  return dispatch => ServerAPI.createComment(comment).then(createdComment => dispatch(addComment(createdComment)))
+}
+
+const removeObject = (objectType, id) => ({
+  type: REMOVE_OBJECT,
+  objectType,
+  id,
+})
+
+export function deleteObject(objectType, id) {
+  return dispatch => ServerAPI.deleteObject(objectType, id).then(() => dispatch(removeObject(objectType, id)))
 }
