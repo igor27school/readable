@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { POST_TYPE } from '../utils/Helper'
+import { POST_TYPE } from '../constants/ObjectTypes'
 import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions'
 import Voter from './Voter'
 import Deleter from './Deleter'

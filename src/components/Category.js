@@ -8,12 +8,16 @@ import PostSummary from './PostSummary'
 
 class Category extends Component {
   componentDidMount() {
-    const { categories } = this.props
+    const {
+      categories,
+      fetchCategoriesFromServer,
+      fetchCategoryPostsFromServer,
+    } = this.props
     const { categoryPath } = this.props.match.params
-    if (categoryPath && Object.keys(categories).length === 0) {
+    if (categoryPath && categories.allIds.length === 0) {
       // We need to fetch categories to know if the category provided is valid
-      this.props.fetchCategoriesFromServer().then(() => this.props.fetchCategoryPostsFromServer(categoryPath))
-    } else if (!('hasAllPosts' in categories) && (categoryPath in categories.byId) && !('postsByScore' in categories.byId[categoryPath])) {
+      fetchCategoriesFromServer().then(() => fetchCategoryPostsFromServer(categoryPath))
+    } else if (!categories.hasAllPosts && (categoryPath in categories.byId) && !('posts' in categories.byId[categoryPath])) {
       /* If:
       * 1) We haven't fetched all posts
       * 2) The category is valid

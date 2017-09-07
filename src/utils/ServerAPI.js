@@ -1,4 +1,5 @@
-import { POST_TYPE, VOTE_UP } from '../utils/Helper'
+import { POST_TYPE } from '../constants/ObjectTypes'
+import { VOTE_UP } from '../constants/VoteTypes'
 
 const api = process.env.REACT_APP_READABLE_API_URL || 'http://localhost:5001'
 

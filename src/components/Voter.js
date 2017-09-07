@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { VOTE_UP, VOTE_DOWN } from '../utils/Helper'
+import { VOTE_UP, VOTE_DOWN } from '../constants/VoteTypes'
 import { vote } from '../actions'
 
 class Voter extends Component {

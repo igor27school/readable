@@ -1,22 +1,9 @@
 import * as ServerAPI from '../utils/ServerAPI'
 import { buildComment, buildPost, buildEditComment, buildEditPost } from '../utils/Helper'
-
-export const CHANGE_SORT_ORDER = "CHANGE_SORT_ORDER"
-export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES"
-export const RECEIVE_ALL_POSTS = "RECEIVE_ALL_POSTS"
-export const RECEIVE_CATEGORY_POSTS = "RECEIVE_CATEGORY_POSTS"
-export const RECEIVE_POST = "RECEIVE_POST"
-export const RECEIVE_POST_COMMENTS = "RECEIVE_POST_COMMENTS"
-export const RECEIVE_VOTE = "RECEIVE_VOTE"
-export const ADD_POST = "ADD_POST"
-export const ADD_COMMENT = "ADD_COMMENT"
-export const REMOVE_OBJECT = "REMOVE_OBJECT"
-export const RECEIVE_COMMENT = "RECEIVE_COMMENT"
-export const MODIFY_COMMENT = "MODIFY_COMMENT"
-export const MODIFY_POST = "MODIFY_POST"
+import * as types from '../constants/ActionTypes'
 
 const changeSortOrder = sortBy => ({
-  type: CHANGE_SORT_ORDER,
+  type: types.CHANGE_SORT_ORDER,
   sortBy,
 })
 
@@ -25,7 +12,7 @@ export function reSort(sortBy) {
 }
 
 const receiveCategories = categories => ({
-  type: RECEIVE_CATEGORIES,
+  type: types.RECEIVE_CATEGORIES,
   categories,
 })
 
@@ -34,7 +21,7 @@ export function fetchCategoriesFromServer() {
 }
 
 const receiveAllPosts = posts => ({
-  type: RECEIVE_ALL_POSTS,
+  type: types.RECEIVE_ALL_POSTS,
   posts,
 })
 
@@ -43,7 +30,7 @@ export function fetchAllPostsFromServer() {
 }
 
 const receiveCategoryPosts = (categoryPath, posts) => ({
-  type: RECEIVE_CATEGORY_POSTS,
+  type: types.RECEIVE_CATEGORY_POSTS,
   categoryPath,
   posts,
 })
@@ -53,7 +40,7 @@ export function fetchCategoryPostsFromServer(categoryPath) {
 }
 
 const receivePost = (post) => ({
-  type: RECEIVE_POST,
+  type: types.RECEIVE_POST,
   post,
 })
 
@@ -62,7 +49,7 @@ export function fetchPostFromServer(postId) {
 }
 
 const receivePostComments = (postId, comments) => ({
-  type: RECEIVE_POST_COMMENTS,
+  type: types.RECEIVE_POST_COMMENTS,
   postId,
   comments,
 })
@@ -72,7 +59,7 @@ export function fetchPostCommentsFromServer(postId) {
 }
 
 const receiveVote = (objectType, id, voteType) => ({
-  type: RECEIVE_VOTE,
+  type: types.RECEIVE_VOTE,
   objectType,
   id,
   voteType,
@@ -83,7 +70,7 @@ export function vote(objectType, id, voteType) {
 }
 
 const addPost = post => ({
-  type: ADD_POST,
+  type: types.ADD_POST,
   post,
 })
 
@@ -93,7 +80,7 @@ export function createPost(values) {
 }
 
 const addComment = comment => ({
-  type: ADD_COMMENT,
+  type: types.ADD_COMMENT,
   comment,
 })
 
@@ -103,7 +90,7 @@ export function createComment(parentPostId, values) {
 }
 
 const removeObject = (objectType, id) => ({
-  type: REMOVE_OBJECT,
+  type: types.REMOVE_OBJECT,
   objectType,
   id,
 })
@@ -113,7 +100,7 @@ export function deleteObject(objectType, id) {
 }
 
 const receiveComment = comment => ({
-  type: RECEIVE_COMMENT,
+  type: types.RECEIVE_COMMENT,
   comment,
 })
 
@@ -122,7 +109,7 @@ export function fetchCommentFromServer(commentId) {
 }
 
 const modifyComment = comment => ({
-  type: MODIFY_COMMENT,
+  type: types.MODIFY_COMMENT,
   comment,
 })
 
@@ -132,7 +119,7 @@ export function editComment(commentId, values) {
 }
 
 const modifyPost = post => ({
-  type: MODIFY_POST,
+  type: types.MODIFY_POST,
   post,
 })
 

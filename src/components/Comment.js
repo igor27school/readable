@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { COMMENT_TYPE } from '../utils/Helper'
+import { COMMENT_TYPE } from '../constants/ObjectTypes'
 import Voter from './Voter'
 import Deleter from './Deleter'
 
