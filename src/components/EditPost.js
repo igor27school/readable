@@ -6,23 +6,20 @@ import { fetchPostFromServer, editPost } from '../actions/ActionCreators'
 
 class EditPost extends Component {
   componentDidMount() {
-    const { posts, fetchPostFromServer } = this.props
-    const { postId } = this.props.match.params
-    if (postId && (!posts.byId || !(postId in posts.byId))) {
+    const { post, postId, fetchPostFromServer } = this.props
+    if (!post) {
       fetchPostFromServer(postId)
     }
   }
   handleSubmit = (e) => {
     e.preventDefault()
-    const { postId } = this.props.match.params
+    const { post } = this.props
     const values = serializeForm(e.target, { hash: true })
-    this.props.editPost(postId, values)
-    this.props.history.push(`/posts/${postId}`)
+    this.props.editPost(post.id, values)
+    this.props.history.push(`/${post.category}/${post.id}`)
   }
   render() {
-    const { posts } = this.props
-    const { postId } = this.props.match.params
-    const post = posts.byId && posts.byId[postId]
+    const { post, postId } = this.props
     if (!post){
       return (
         <div>Post id is invalid or the post has been deleted: {postId}</div>
@@ -34,7 +31,7 @@ class EditPost extends Component {
     }
     return (
       <div>
-        <Link to="/">Close</Link>
+        <Link to={`/${post.category}/${post.id}`}>Close</Link>
         <form onSubmit={this.handleSubmit}>
           <input type="text" name="title" defaultValue={post.title}/>
           <textarea name="body" defaultValue={post.body}></textarea>
@@ -46,8 +43,11 @@ class EditPost extends Component {
   }
 }
 
-function mapStateToProps ({ posts }) {
-  return {posts}
+function mapStateToProps ({ posts }, { match }) {
+  return {
+    post: posts.byId[match.params.post_id],
+    postId: match.params.post_id,
+  }
 }
 
 function mapDispatchToProps (dispatch) {

@@ -6,25 +6,20 @@ import { fetchCommentFromServer, editComment } from '../actions/ActionCreators'
 
 class EditComment extends Component {
   componentDidMount() {
-    const { comments } = this.props
-    const { commentId } = this.props.match.params
-    if (!comments.byId || !(commentId in comments.byId)) {
+    const { comment, commentId } = this.props
+    if (!comment) {
       fetchCommentFromServer(commentId)
     }
   }
   handleSubmit = (e) => {
     e.preventDefault()
-    const { comments } = this.props
-    const { commentId } = this.props.match.params
+    const { comment, commentId, category } = this.props
     const values = serializeForm(e.target, { hash: true })
     this.props.editComment(commentId, values)
-    const parentId = comments.byId[commentId].parentId
-    this.props.history.push(`/posts/${parentId}`)
+    this.props.history.push(`/${category}/${comment.parentId}`)
   }
   render() {
-    const { comments } = this.props
-    const { commentId } = this.props.match.params
-    const comment = comments.byId && comments.byId[commentId]
+    const { comment, commentId, category } = this.props
     if (!comment){
       return (
         <div>Comment id is invalid or the comment has been deleted: {commentId}</div>
@@ -34,10 +29,9 @@ class EditComment extends Component {
         <div>This comment has been deleted: {commentId}</div>
       )
     }
-    const parentId = comment.parentId
     return (
       <div>
-        <Link to={`/posts/${parentId}`}>Close</Link>
+        <Link to={`/${category}/${comment.parentId}`}>Close</Link>
         <form onSubmit={this.handleSubmit}>
           <textarea name="body" defaultValue={comment.body}></textarea>
           <button>Submit Edits</button>
@@ -47,8 +41,12 @@ class EditComment extends Component {
   }
 }
 
-function mapStateToProps ({comments}) {
-  return {comments}
+function mapStateToProps ({ comments }, { match }) {
+  return {
+    comment: comments.byId[match.params.comment_id],
+    commentId: match.params.comment_id,
+    category: match.params.category,
+  }
 }
 
 function mapDispatchToProps (dispatch) {

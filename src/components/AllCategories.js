@@ -12,12 +12,12 @@ import PostSummary from './PostSummary'
 class AllCategories extends Component {
   componentDidMount() {
     const {
+      hasCategories,
       hasAllPosts,
-      categories,
       fetchCategoriesFromServer,
       fetchAllPostsFromServer,
     } = this.props
-    if (categories.length === 0) {
+    if (!hasCategories) {
       fetchCategoriesFromServer().then(() => fetchAllPostsFromServer())
     } else if (!hasAllPosts) {
       fetchAllPostsFromServer()
@@ -32,7 +32,7 @@ class AllCategories extends Component {
         {categories.map(category => (
           <div key={category.path}>
             <Link
-              to={`/categories/${category.path}`}
+              to={`/${category.path}`}
             >{category.name}</Link>
           </div>
         ))}
@@ -48,9 +48,10 @@ class AllCategories extends Component {
 
 function mapStateToProps ({ sortOrder, categories, posts }) {
   return {
+    hasCategories: categories.allIds.length > 0,
     hasAllPosts: categories.hasAllPosts,
-    categories: categories.allIds.map(category_path => categories.byId[category_path]),
-    posts: posts.allIds ? posts.allIds.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id) : [],
+    categories: categories.allIds.map(category => categories.byId[category]),
+    posts: posts.allIds.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id),
   }
 }
 

@@ -8,16 +8,15 @@ import Deleter from './Deleter'
 
 class PostSummary extends Component {
   componentDidMount() {
-    const { posts, postId } = this.props
-    if (postId && (!posts.byId || !(postId in posts.byId))) {
+    const { post, postId } = this.props
+    if (!post) {
       this.props.fetchPostFromServer(postId).then(() => this.props.fetchPostCommentsFromServer(postId))
-    } else if (postId && !posts.byId[postId].hasAllComments) {
+    } else if (post && !post.hasAllComments) {
       this.props.fetchPostCommentsFromServer(postId)
     }
   }
   render() {
-    const { posts, postId } = this.props
-    const post = posts.byId[postId]
+    const { post, postId } = this.props
     if (!post){
       return (
         <div>Invalid post id: {postId}</div>
@@ -29,22 +28,23 @@ class PostSummary extends Component {
     }
     return (
       <div>
-        <Deleter objectType={POST_TYPE} id={postId}/>
-        <Link to={`/edit/posts/${post.id}`}>Edit</Link>
-        <Link to={`/posts/${postId}`}>{post.title}</Link>
+        <Deleter objectType={POST_TYPE} id={post.id}/>
+        <Link to={`/edit/${post.id}`}>Edit</Link>
+        <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
         <span> Author: {post.author}</span>
         <span> Score: {post.voteScore}</span>
-        {post.comments && post.comments.length > 0 && (
-          <span> Number of {post.comments.length === 1 ? 'comment' : 'comments'}: {post.comments.length}</span>
-        )}
-        <Voter objectType={POST_TYPE} id={postId}/>
+        <span> Number of comments: {post.comments.length}</span>
+        <Voter objectType={POST_TYPE} id={post.id}/>
       </div>
     )
   }
 }
 
-function mapStateToProps ({ posts }) {
-  return { posts }
+function mapStateToProps ({ posts }, { postId }) {
+  return {
+    post: posts.byId[postId],
+    postId,
+  }
 }
 
 function mapDispatchToProps (dispatch) {

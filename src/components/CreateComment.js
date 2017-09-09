@@ -7,16 +7,18 @@ import { createComment } from '../actions/ActionCreators'
 class CreateComment extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
-    const { parentId } = this.props.match.params
+    const category = this.props.match.params.category
+    const parentId = this.props.match.params.parent_id
     const values = serializeForm(e.target, { hash: true })
     this.props.createComment(parentId, values)
-    this.props.history.push(`/posts/${parentId}`)
+    this.props.history.push(`/${category}/${parentId}`)
   }
   render() {
-    const { parentId } = this.props.match.params
+    const category = this.props.match.params.category
+    const parentId = this.props.match.params.parent_id
     return (
       <div>
-        <Link to={`/posts/${parentId}`}>Close</Link>
+        <Link to={`/${category}/${parentId}`}>Close</Link>
         <form onSubmit={this.handleSubmit}>
           <input type="text" name="author" placeholder="Author"/>
           <textarea name="body" placeholder="Body"></textarea>

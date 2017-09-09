@@ -7,8 +7,7 @@ import Deleter from './Deleter'
 
 class Comment extends Component {
   render() {
-    const { comments, commentId } = this.props
-    const comment = comments.byId && comments.byId[commentId]
+    const { comment, commentId, category } = this.props
     if (!comment){
       return (
         <div>Invalid comment id: {commentId}</div>
@@ -20,19 +19,23 @@ class Comment extends Component {
     }
     return (
       <h4>
-        <Deleter objectType={COMMENT_TYPE} id={commentId}/>
-        <Link to={`/edit/comments/${comment.id}`}>Edit</Link>
+        <Deleter objectType={COMMENT_TYPE} id={comment.id}/>
+        <Link to={`/edit/${category}/${comment.id}`}>Edit</Link>
         <span> {comment.author}</span>
         <span> {comment.body}</span>
         <span> Score: {comment.voteScore}</span>
-        <Voter objectType={COMMENT_TYPE} id={commentId}/>
+        <Voter objectType={COMMENT_TYPE} id={comment.id}/>
       </h4>
     )
   }
 }
 
-function mapStateToProps ({ comments }) {
-  return {comments}
+function mapStateToProps ({ comments }, { commentId, category }) {
+  return {
+    comment: comments.byId[commentId],
+    commentId,
+    category,
+  }
 }
 
 export default connect(mapStateToProps)(Comment)

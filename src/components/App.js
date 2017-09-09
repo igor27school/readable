@@ -13,12 +13,12 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={AllCategories}/>
-        <Route path="/categories/:categoryPath" component={Category}/>
-        <Route path="/posts/:postId" component={PostDetails}/>
         <Route exact path="/create" component={CreatePost}/>
-        <Route path="/create/:parentId" component={CreateComment}/>
-        <Route path="/edit/posts/:postId" component={EditPost}/>
-        <Route path="/edit/comments/:commentId" component={EditComment}/>
+        <Route path="/create/:category/:parent_id" component={CreateComment}/>
+        <Route path="/edit/:category/:comment_id" component={EditComment}/>
+        <Route path="/edit/:post_id" component={EditPost}/>
+        <Route path="/:category/:post_id" component={PostDetails}/>
+        <Route path="/:category" component={Category}/>
       </Switch>
     )
   }

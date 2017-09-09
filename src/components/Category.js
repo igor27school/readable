@@ -9,39 +9,31 @@ import PostSummary from './PostSummary'
 class Category extends Component {
   componentDidMount() {
     const {
-      categories,
+      hasCategories,
+      category,
+      categoryPath,
       fetchCategoriesFromServer,
       fetchCategoryPostsFromServer,
     } = this.props
-    const { categoryPath } = this.props.match.params
-    if (categoryPath && categories.allIds.length === 0) {
+    if (!hasCategories) {
       // We need to fetch categories to know if the category provided is valid
       fetchCategoriesFromServer().then(() => fetchCategoryPostsFromServer(categoryPath))
-    } else if (!categories.hasAllPosts && (categoryPath in categories.byId) && !categories.byId[categoryPath].hasAllPosts) {
-      /* If:
-      * 1) We haven't fetched all posts
-      * 2) The category is valid
-      * 3) We haven't fetched this category yet
-      * then fetch it!
-      */
+    } else if (category && !category.hasAllPosts) {
       this.props.fetchCategoryPostsFromServer(categoryPath)
     }
   }
   render() {
-    const { sortOrder, categories, posts } = this.props
-    const { categoryPath } = this.props.match.params
-    const category = categories.byId && categories.byId[categoryPath]
+    const { category, categoryPath, postIds } = this.props
     if (!category) {
       return (
         <h4>The category {categoryPath} does not exist</h4>
       )
     }
-    const postIds = category.posts ? category.posts.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id) : []
     return (
       <div>
         <h3>{category.name}</h3>
         <Sorter/>
-        {posts && postIds.map(postId => (
+        {postIds.map(postId => (
           <PostSummary key={postId} postId={postId}/>
         ))}
         <h4><Link to='/create'>New Post</Link></h4>
@@ -51,8 +43,13 @@ class Category extends Component {
   }
 }
 
-function mapStateToProps ({ sortOrder, categories, posts }) {
-  return {sortOrder, categories, posts}
+function mapStateToProps ({ sortOrder, categories, posts }, { match }) {
+  return {
+    hasCategories: categories.allIds.length > 0,
+    category: categories.byId[match.params.category],
+    categoryPath: match.params.category,
+    postIds: (match.params.category in categories.byId) ? categories.byId[match.params.category].posts.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id) : 0
+  }
 }
 
 function mapDispatchToProps (dispatch) {

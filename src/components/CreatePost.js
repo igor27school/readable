@@ -6,8 +6,8 @@ import { fetchCategoriesFromServer, createPost } from '../actions/ActionCreators
 
 class CreatePost extends Component {
   componentDidMount() {
-    const { categories, fetchCategoriesFromServer } = this.props
-    if (categories.length === 0) {
+    const { hasCategories, fetchCategoriesFromServer } = this.props
+    if (!hasCategories) {
       fetchCategoriesFromServer()
     }
   }
@@ -18,6 +18,7 @@ class CreatePost extends Component {
     this.props.history.push('/')
   }
   render() {
+    const { categories } = this.props
     return (
       <div>
         <Link to="/">Close</Link>
@@ -27,7 +28,7 @@ class CreatePost extends Component {
           <textarea name="body" placeholder="Body"></textarea>
           <select defaultValue="none" name="category">
             <option value="none" disabled>Select category</option>
-            {this.props.categories.map((category) => (
+            {categories.map((category) => (
               <option
                 key={category.name}
                 value={category.name}
@@ -44,7 +45,8 @@ class CreatePost extends Component {
 
 function mapStateToProps ({ categories }) {
   return {
-    categories: ('byId' in categories) ? Object.keys(categories.byId).map(category_path => categories.byId[category_path]) : [],
+    hasCategories: categories.allIds.length > 0,
+    categories: categories.allIds.map(category => categories.byId[category]),
   }
 }
 
