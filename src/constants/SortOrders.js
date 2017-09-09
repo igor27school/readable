@@ -1,0 +1,2 @@
+export const SORT_BY_SCORES = "SORT_BY_SCORES"
+export const SORT_BY_TIMESTAMPS = "SORT_BY_TIMESTAMPS"

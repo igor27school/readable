@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { deleteObject } from '../actions'
+import { deleteObject } from '../actions/ActionCreators'
 
 class Deleter extends Component {
   handleClick = () => {

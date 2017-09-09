@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { fetchCategoriesFromServer, fetchCategoryPostsFromServer } from '../actions'
+import { fetchCategoriesFromServer, fetchCategoryPostsFromServer } from '../actions/ActionCreators'
 import { compare } from '../utils/Helper'
 import Sorter from './Sorter'
 import PostSummary from './PostSummary'
@@ -17,7 +17,7 @@ class Category extends Component {
     if (categoryPath && categories.allIds.length === 0) {
       // We need to fetch categories to know if the category provided is valid
       fetchCategoriesFromServer().then(() => fetchCategoryPostsFromServer(categoryPath))
-    } else if (!categories.hasAllPosts && (categoryPath in categories.byId) && !('posts' in categories.byId[categoryPath])) {
+    } else if (!categories.hasAllPosts && (categoryPath in categories.byId) && !categories.byId[categoryPath].hasAllPosts) {
       /* If:
       * 1) We haven't fetched all posts
       * 2) The category is valid

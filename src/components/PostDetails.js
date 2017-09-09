@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions'
+import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions/ActionCreators'
 import { compare } from '../utils/Helper'
 import { POST_TYPE } from '../constants/ObjectTypes'
 import Sorter from './Sorter'
@@ -13,9 +13,9 @@ class PostDetails extends Component {
   componentDidMount() {
     const { posts } = this.props
     const { postId } = this.props.match.params
-    if (postId && (!posts.byId || !(postId in posts.byId))) {
+    if (postId && !(postId in posts.byId)) {
       this.props.fetchPostFromServer(postId).then(() => this.props.fetchPostCommentsFromServer(postId))
-    } else if (postId && !('comments' in posts.byId[postId])) {
+    } else if (postId && !posts.byId[postId].hasAllComments) {
       this.props.fetchPostCommentsFromServer(postId)
     }
   }

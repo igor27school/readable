@@ -10,20 +10,26 @@ function categories(state=initialState, action) {
   switch(action.type) {
     case ActionTypes.RECEIVE_CATEGORIES:
       return action.categories.reduce((state, category) => {
-          state.byId[category.path] = {
-            ...category,
-            posts: [],
+          return {
+            ...state,
+            byId: {
+              ...state.byId,
+              [category.path]: {
+                ...category,
+                posts: [],
+                hasAllPosts: false,
+              }
+            },
+            allIds: state.allIds.concat([category.path])
           }
-          state.allIds.push(category.path)
-          return state
         },
-        // Makes sure we over-write any previous categories stored
-        { byId: {}, allIds: [], hasAllPosts: false }
+        initialState
       )
     case ActionTypes.RECEIVE_ALL_POSTS:
       // Can't receive posts if categories are unavailable
       // Don't want to receive them if hasAllPosts is already true
       if (state.allIds.length === 0 || state.hasAllPosts) {
+        console.warn('Receiving all posts, but either categories are empty or hasAllPosts is already true')
         return state
       }
       const categorizedPosts = action.posts.reduce((categories, post) => {
@@ -35,9 +41,15 @@ function categories(state=initialState, action) {
       }, {})
       return {
         ...state,
-        byId: state.allIds.reduce((categories, category) => {
-          categories[category].posts = (category in categorizedPosts) ? categorizedPosts[category].map(post => post.id) : []
-          return categories
+        byId: state.allIds.reduce((byId, category) => {
+          return {
+            ...byId,
+            [category]: {
+              ...byId[category],
+              posts: (category in categorizedPosts) ? categorizedPosts[category].map(post => post.id) : [],
+              hasAllPosts: true,
+            }
+          }
         }, state.byId),
         hasAllPosts: true
       }
@@ -45,16 +57,34 @@ function categories(state=initialState, action) {
       // If the provided category is not one of the categories, ignore it
       // If we already have all the posts, don't process
       if (!(action.categoryPath in state.byId) || state.hasAllPosts) {
+        console.warn('Receiving category posts, but the categoryPath is not found OR we already have all the posts')
         return state
       }
-      state.byId[action.categoryPath].posts = action.posts.map(post => post.id)
-      return state
-    case ActionTypes.ADD_POST:
-      const categoryPath = action.post.category
-      if (categoryPath in state.byId) {
-        state.byId[categoryPath].posts.push(action.post.id)
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.categoryPath]: {
+            ...state.byId[action.categoryPath],
+            posts: action.posts.map(post => post.id),
+            hasAllPosts: true,
+          },
+        },
       }
-      return state
+    case ActionTypes.RECEIVE_POST:
+      if (!(action.post.category in state.byId)) {
+        return state
+      }
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.category]: {
+            ...state.byId[action.post.category],
+            posts: state.byId[action.post.category].posts.concat([action.post.id]),
+          },
+        },
+      }
     default:
       return state
   }

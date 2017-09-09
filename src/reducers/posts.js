@@ -1,6 +1,5 @@
 import * as ActionTypes from '../constants/ActionTypes'
 import * as ObjectTypes from '../constants/ObjectTypes'
-import * as VoteTypes from '../constants/VoteTypes'
 
 const initialState = {
   byId: {},
@@ -12,61 +11,111 @@ function posts(state=initialState, action) {
     case ActionTypes.RECEIVE_ALL_POSTS:
     case ActionTypes.RECEIVE_CATEGORY_POSTS:
       return action.posts.reduce((state, post) => {
-        if (!(post.id in state.byId)) {
-          state.byId[post.id] = {
-            ...post,
-            comments: [],
-          }
-          state.allIds.push(post.id)
+        if (post.id in state.byId) {
+          return state
         }
-        return state
+        return {
+          ...state,
+          byId: {
+            ...state.byId,
+            [post.id]: {
+              ...post,
+              hasAllComments: false,
+              comments: [],
+            }
+          },
+          allIds: state.allIds.concat([post.id])
+        }
       }, state)
     case ActionTypes.RECEIVE_POST:
-    case ActionTypes.ADD_POST:
-    case ActionTypes.MODIFY_POST:
       if (!action.post.id) {
+        console.warn('Receiving post, but the post.id is undefined')
         return state
       }
       if (action.post.id in state.byId) {
-        state.byId[action.post.id] = {
-          ...action.post,
-          comments: state.byId[action.post.id].comments,
+        return {
+          ...state,
+          byId: {
+            ...state.byId,
+            [action.post.id]: {
+              ...state.byId[action.post.id],
+              // Passed values will override the existing values
+              ...action.post,
+            }
+          }
         }
-      } else {
-        state.byId[action.post.id] = {
-          ...action.post,
-          comments: [],
-        }
-        state.allIds.push(action.post.id)
       }
-      return state
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.id]: {
+            ...action.post,
+            comments: [],
+            hasAllComments: false,
+          }
+        },
+        allIds: state.allIds.concat([action.post.id])
+      }
     case ActionTypes.RECEIVE_POST_COMMENTS:
       if (!(action.postId in state.byId)) {
+        console.warn('Receiving post comments, but the postId is not found')
         return state
       }
-      state.byId[action.postId].comments = action.comments.map(comment => comment.id)
-      return state
-    case ActionTypes.RECEIVE_VOTE:
-      if (action.objectType !== ObjectTypes.POST_TYPE || !(action.id in state.byId)) {
-        return state
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.postId]: {
+            ...state.byId[action.postId],
+            comments: action.comments.map(comment => comment.id),
+            hasAllComments: true,
+          }
+        }
       }
-      state.byId[action.id].voteScore = action.voteType === VoteTypes.VOTE_UP ?
-          state.byId[action.id].voteScore + 1 :
-          state.byId[action.id].voteScore - 1
-      return state
-    case ActionTypes.ADD_COMMENT:
     case ActionTypes.RECEIVE_COMMENT:
       if (!(action.comment.parentId in state.byId)) {
+        console.warn('Receiving comment, but the postId is not found')
         return state
       }
-      state.byId[action.comment.parentId].comments.push(action.comment.id)
-      return state
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.comment.parentId]: {
+            ...state.byId[action.comment.parentId],
+            comments: state.byId[action.comment.parentId].comments.concat([action.comment.id])
+          }
+        }
+      }
     case ActionTypes.REMOVE_OBJECT:
       if (action.objectType !== ObjectTypes.POST_TYPE || !(action.id in state.byId)) {
         return state
       }
-      state.byId[action.id].delted = true
-      return state
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.id]: {
+            ...state.byId[action.id],
+            deleted: true,
+          }
+        }
+      }
+    case ActionTypes.RECEIVE_VOTE:
+      if (action.objectType !== ObjectTypes.POST_TYPE || !(action.id in state.byId)) {
+        return state
+      }
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.id]: {
+            ...state.byId[action.id],
+            voteScore: action.score,
+          }
+        }
+      }
     default:
       return state
   }

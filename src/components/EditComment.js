@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import serializeForm from 'form-serialize'
 import { Link } from 'react-router-dom'
-import { fetchCommentFromServer, editComment } from '../actions'
+import { fetchCommentFromServer, editComment } from '../actions/ActionCreators'
 
 class EditComment extends Component {
   componentDidMount() {

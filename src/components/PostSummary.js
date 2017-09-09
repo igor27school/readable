@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { POST_TYPE } from '../constants/ObjectTypes'
-import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions'
+import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions/ActionCreators'
 import Voter from './Voter'
 import Deleter from './Deleter'
 
@@ -11,7 +11,7 @@ class PostSummary extends Component {
     const { posts, postId } = this.props
     if (postId && (!posts.byId || !(postId in posts.byId))) {
       this.props.fetchPostFromServer(postId).then(() => this.props.fetchPostCommentsFromServer(postId))
-    } else if (postId && !('comments' in posts.byId[postId])) {
+    } else if (postId && !posts.byId[postId].hasAllComments) {
       this.props.fetchPostCommentsFromServer(postId)
     }
   }

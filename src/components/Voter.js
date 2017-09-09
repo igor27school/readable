@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { VOTE_UP, VOTE_DOWN } from '../constants/VoteTypes'
-import { vote } from '../actions'
+import { vote } from '../actions/ActionCreators'
 
 class Voter extends Component {
   render() {

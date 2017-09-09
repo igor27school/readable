@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import serializeForm from 'form-serialize'
 import { Link } from 'react-router-dom'
-import { fetchCategoriesFromServer, createPost } from '../actions'
+import { fetchCategoriesFromServer, createPost } from '../actions/ActionCreators'
 
 class CreatePost extends Component {
   componentDidMount() {

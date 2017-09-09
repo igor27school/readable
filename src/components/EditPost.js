@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import serializeForm from 'form-serialize'
 import { Link } from 'react-router-dom'
-import { fetchPostFromServer, editPost } from '../actions'
+import { fetchPostFromServer, editPost } from '../actions/ActionCreators'
 
 class EditPost extends Component {
   componentDidMount() {

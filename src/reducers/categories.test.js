@@ -1,44 +1,48 @@
+import * as Actions from '../actions/Actions'
 import reducer from './categories'
-import * as ActionTypes from '../constants/ActionTypes'
+
+// Disable warnings since we are testing how reducer handles unexpected conditions
+console.warn = jest.fn()
+
+const initialTestState = {
+  byId:{},
+  allIds: [],
+  hasAllPosts: false,
+}
 
 describe('initialState tests', () => {
   it('default state should equal the initial state', () => {
-    expect(reducer(undefined, {})).toEqual({
-      byId:{},
-      allIds: [],
-      hasAllPosts: false,
-    })
+    expect(reducer(undefined, {})).toEqual(initialTestState)
   })
 })
 
 describe('RECEIVE_CATEGORIES tests', () => {
   it('RECEIVE_CATEGORIES as first request should process', () => {
     expect(reducer(
-      undefined,
-      {
-        type: ActionTypes.RECEIVE_CATEGORIES,
-        categories: [
-          {
-            name: 'category 1',
-            path: 'category1',
-          },
-          {
-            name: 'category 2',
-            path: 'category2',
-          },
-        ],
-      })
+      initialTestState,
+      Actions.receiveCategories([
+        {
+          name: 'category 1',
+          path: 'category1',
+        },
+        {
+          name: 'category 2',
+          path: 'category2',
+        },
+      ]))
     ).toEqual({
       byId: {
         category1: {
           name: 'category 1',
           path: 'category1',
           posts: [],
+          hasAllPosts: false,
         },
         category2: {
           name: 'category 2',
           path: 'category2',
           posts: [],
+          hasAllPosts: false,
         },
       },
       allIds: ['category1', 'category2'],
@@ -52,9 +56,7 @@ describe('RECEIVE_CATEGORIES tests', () => {
         byIds: {'something': 'else'},
         allIds: ['something'],
       },
-      {
-        type: ActionTypes.RECEIVE_CATEGORIES,
-        categories: [
+      Actions.receiveCategories([
           {
             name: 'category 1',
             path: 'category1',
@@ -63,19 +65,21 @@ describe('RECEIVE_CATEGORIES tests', () => {
             name: 'category 2',
             path: 'category2',
           },
-        ],
-      }
-    )).toEqual({
+        ]
+      ))
+    ).toEqual({
       byId: {
         category1: {
           name: 'category 1',
           path: 'category1',
           posts: [],
+          hasAllPosts: false,
         },
         category2: {
           name: 'category 2',
           path: 'category2',
           posts: [],
+          hasAllPosts: false,
         },
       },
       allIds: ['category1', 'category2'],
@@ -87,9 +91,7 @@ describe('RECEIVE_CATEGORIES tests', () => {
 describe('RECEIVE_ALL_POSTS tests', () => {
   it('RECEIVE_ALL_POSTS as first request should not change state', () => {
     expect(
-      reducer(undefined, {
-        type: ActionTypes.RECEIVE_ALL_POSTS,
-        posts: [
+      reducer(undefined, Actions.receiveAllPosts([
           {
             id: 'post1',
             title: 'post1 title',
@@ -106,13 +108,9 @@ describe('RECEIVE_ALL_POSTS tests', () => {
             category: 'category1',
             deleted: false,
           },
-        ],
-      })
-    ).toEqual({
-      byId:{},
-      allIds: [],
-      hasAllPosts: false,
-    })
+        ])
+      )
+    ).toEqual(initialTestState)
   })
 
   it('RECEIVE_ALL_POSTS should proceed when categories exist', () => {
@@ -123,19 +121,19 @@ describe('RECEIVE_ALL_POSTS tests', () => {
             name: 'category 1',
             path: 'category1',
             posts: [],
+            hasAllPosts: false,
           },
           category2: {
             name: 'category 2',
             path: 'category2',
             posts: [],
+            hasAllPosts: false,
           },
         },
         allIds: ['category1', 'category2'],
         hasAllPosts: false,
       },
-      {
-        type: ActionTypes.RECEIVE_ALL_POSTS,
-        posts: [
+      Actions.receiveAllPosts([
           {
             id: 'post1',
             title: 'post1 title',
@@ -152,8 +150,8 @@ describe('RECEIVE_ALL_POSTS tests', () => {
             category: 'category1',
             deleted: false,
           },
-        ],
-      })
+        ])
+      )
     ).toEqual({
       byId: {
         category1: {
@@ -163,11 +161,13 @@ describe('RECEIVE_ALL_POSTS tests', () => {
             'post1',
             'post2',
           ],
+          hasAllPosts: true,
         },
         category2: {
           name: 'category 2',
           path: 'category2',
           posts: [],
+          hasAllPosts: true,
         }
       },
       allIds: [
@@ -181,16 +181,9 @@ describe('RECEIVE_ALL_POSTS tests', () => {
 
 describe('RECEIVE_CATEGORY_POSTS tests', () => {
   it('RECEIVE_CATEGORY_POSTS for invalid category should not change state', () => {
-    expect(reducer(
-      {
-        byId:{},
-        allIds: [],
-        hasAllPosts: false,
-      },
-      {
-        type: ActionTypes.RECEIVE_CATEGORY_POSTS,
-        categoryPath: 'category1',
-        posts: [
+    expect(reducer(initialTestState,
+      Actions.receiveCategoryPosts('category1',
+        [
           {
             id: 'post1',
             title: 'post1 title',
@@ -207,13 +200,9 @@ describe('RECEIVE_CATEGORY_POSTS tests', () => {
             category: 'category1',
             deleted: false,
           },
-        ],
-      })
-    ).toEqual({
-      byId:{},
-      allIds: [],
-      hasAllPosts: false,
-    })
+        ])
+      )
+    ).toEqual(initialTestState)
   })
 
   it('RECEIVE_CATEGORY_POSTS should proceed when categories exist', () => {
@@ -224,20 +213,20 @@ describe('RECEIVE_CATEGORY_POSTS tests', () => {
             name: 'category 1',
             path: 'category1',
             posts: [],
+            hasAllPosts: false,
           },
           category2: {
             name: 'category 2',
             path: 'category2',
             posts: [],
+            hasAllPosts: false,
           },
         },
         allIds: ['category1', 'category2'],
         hasAllPosts: false,
       },
-      {
-        type: ActionTypes.RECEIVE_CATEGORY_POSTS,
-        categoryPath: 'category1',
-        posts: [
+      Actions.receiveCategoryPosts('category1',
+        [
           {
             id: 'post1',
             title: 'post1 title',
@@ -254,9 +243,9 @@ describe('RECEIVE_CATEGORY_POSTS tests', () => {
             category: 'category1',
             deleted: false,
           },
-        ],
-      }
-    )).toEqual({
+        ])
+      )
+    ).toEqual({
       byId: {
         category1: {
           name: 'category 1',
@@ -265,11 +254,13 @@ describe('RECEIVE_CATEGORY_POSTS tests', () => {
             'post1',
             'post2',
           ],
+          hasAllPosts: true,
         },
         category2: {
           name: 'category 2',
           path: 'category2',
           posts: [],
+          hasAllPosts: false,
         }
       },
       allIds: [
@@ -281,8 +272,8 @@ describe('RECEIVE_CATEGORY_POSTS tests', () => {
   })
 })
 
-describe('ADD_POST tests', () => {
-  it('ADD_POST when category missing should not change state', () => {
+describe('RECEIVE_POST tests', () => {
+  it('RECEIVE_POST when category missing should not change state', () => {
     expect(reducer(
       {
         byId: {
@@ -290,28 +281,28 @@ describe('ADD_POST tests', () => {
             name: 'category 2',
             path: 'category2',
             posts: [],
+            hasAllPosts: false,
           },
         },
         allIds: ['category2'],
         hasAllPosts: false,
       },
-      {
-        type: ActionTypes.ADD_POST,
-        post: {
+      Actions.receivePost({
           id: 'post1',
           title: 'post1 title',
           body: 'post1 body',
           author: 'post1 author',
           category: 'category1',
           deleted: false,
-        },
-      })
+        })
+      )
     ).toEqual({
       byId: {
         category2: {
           name: 'category 2',
           path: 'category2',
           posts: [],
+          hasAllPosts: false,
         },
       },
       allIds: ['category2'],
@@ -319,7 +310,7 @@ describe('ADD_POST tests', () => {
     })
   })
 
-  it('ADD_POST should proceed when category exists', () => {
+  it('RECEIVE_POST should proceed when category exists', () => {
     expect(reducer(
       {
         byId: {
@@ -327,27 +318,27 @@ describe('ADD_POST tests', () => {
             name: 'category 1',
             path: 'category1',
             posts: [],
+            hasAllPosts: false,
           },
           category2: {
             name: 'category 2',
             path: 'category2',
             posts: [],
+            hasAllPosts: false,
           },
         },
         allIds: ['category1', 'category2'],
         hasAllPosts: false,
       },
-      {
-        type: ActionTypes.ADD_POST,
-        post: {
+      Actions.receivePost({
           id: 'post1',
           title: 'post1 title',
           body: 'post1 body',
           author: 'post1 author',
           category: 'category1',
           deleted: false,
-        },
-      })
+        })
+      )
     ).toEqual({
       byId: {
         category1: {
@@ -356,11 +347,13 @@ describe('ADD_POST tests', () => {
           posts: [
             'post1',
           ],
+          hasAllPosts: false,
         },
         category2: {
           name: 'category 2',
           path: 'category2',
           posts: [],
+          hasAllPosts: false,
         },
       },
       allIds: [

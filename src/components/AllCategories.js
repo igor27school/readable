@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import {
   fetchCategoriesFromServer,
   fetchAllPostsFromServer,
-} from '../actions'
+} from '../actions/ActionCreators'
 import { compare } from '../utils/Helper'
 import Sorter from './Sorter'
 import PostSummary from './PostSummary'

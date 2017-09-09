@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import serializeForm from 'form-serialize'
 import { Link } from 'react-router-dom'
-import { createComment } from '../actions'
+import { createComment } from '../actions/ActionCreators'
 
 class CreateComment extends Component {
   handleSubmit = (e) => {

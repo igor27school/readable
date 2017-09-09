@@ -1,8 +1,5 @@
 import uuid from 'uuid/v1'
-
-// Used for sorting posts and comments
-export const SORT_BY_SCORES = "SORT_BY_SCORES"
-export const SORT_BY_TIMESTAMPS = "SORT_BY_TIMESTAMPS"
+import { SORT_BY_SCORES, SORT_BY_TIMESTAMPS } from '../constants/SortOrders'
 
 export const compare = sortBy => (a, b) => {
   switch (sortBy) {

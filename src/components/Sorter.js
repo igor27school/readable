@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { reSort } from '../actions'
-import { SORT_BY_SCORES, SORT_BY_TIMESTAMPS } from '../utils/Helper'
+import { reSort } from '../actions/ActionCreators'
+import { SORT_BY_SCORES, SORT_BY_TIMESTAMPS } from '../constants/SortOrders'
 
 class Sorter extends Component {
   render() {
