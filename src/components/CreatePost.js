@@ -14,6 +14,16 @@ class CreatePost extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const values = serializeForm(e.target, { hash: true })
+    console.log(values)
+    // Basic form data validation
+    if (values.category === 'none') {
+      alert('Please fill out the category!')
+      return false
+    }
+    if (!values.title || values.title.trim() === '') {
+      alert('Please include a proper title!')
+      return false
+    }
     this.props.createPost(values)
     this.props.history.push('/')
   }

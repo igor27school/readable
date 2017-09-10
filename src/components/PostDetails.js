@@ -31,25 +31,30 @@ class PostDetails extends Component {
     }
     return (
       <div>
-        <h2>
-          <Deleter
-            objectType={POST_TYPE}
-            id={post.id}
-            history={this.props.history}
-          />
-          <Link to={`/edit/${post.id}`}>Edit</Link>
-          <span> {post.title}</span>
-          <span> Score: {post.voteScore}</span>
+        <Link to={`/edit/${post.id}`}>Edit Post</Link>
+        <Deleter
+          objectType={POST_TYPE}
+          id={post.id}
+          history={this.props.history}
+        />
+        <h2>{post.title}</h2>
+        <h3>Content: {post.body ? post.body : "Empty"}</h3>
+        <h3>Author: {post.author ? post.author : "Unknown"}</h3>
+        <h3>Time posted: {(new Date(post.timestamp)).toString()}</h3>
+        <h3>Number of comments: {commentIds.length}</h3>
+        <h3>
+          Score: {post.voteScore}
           <Voter objectType={POST_TYPE} id={post.id}/>
-        </h2>
-        <h3>{post.body}</h3>
-        <h3>{post.author}</h3>
-        <h3>{(new Date(post.timestamp)).toString()}</h3>
-        <h3> Number of comments: {post.comments.length}</h3>
+        </h3>
+        <h2>COMMENTS</h2>
         <Sorter/>
+        <ul>
         {commentIds.map(commentId => (
-          <Comment key={commentId} category={post.category} commentId={commentId}/>
+          <li key={commentId}>
+            <Comment category={post.category} commentId={commentId}/>
+          </li>
         ))}
+        </ul>
         <h4><Link to={`/create/${post.category}/${post.id}`}>New Comment</Link></h4>
         <h4><Link to={`/${post.category}`}>View {post.category} Category</Link></h4>
         <h4><Link to='/'>View All Categories</Link></h4>

@@ -31,11 +31,15 @@ class Category extends Component {
     }
     return (
       <div>
-        <h3>{category.name}</h3>
+        <h2>{category.name.toUpperCase()}</h2>
         <Sorter/>
-        {postIds.map(postId => (
-          <PostSummary key={postId} postId={postId}/>
-        ))}
+        <ul>
+          {postIds.map(postId => (
+            <li key={postId}>
+              <PostSummary postId={postId}/>
+            </li>
+          ))}
+        </ul>
         <h4><Link to='/create'>New Post</Link></h4>
         <h4><Link to='/'>View All Categories</Link></h4>
       </div>

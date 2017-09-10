@@ -18,14 +18,16 @@ class Comment extends Component {
       )
     }
     return (
-      <h4>
-        <Deleter objectType={COMMENT_TYPE} id={comment.id}/>
+      <div>
         <Link to={`/edit/${category}/${comment.id}`}>Edit</Link>
-        <span> {comment.author}</span>
-        <span> {comment.body}</span>
-        <span> Score: {comment.voteScore}</span>
-        <Voter objectType={COMMENT_TYPE} id={comment.id}/>
-      </h4>
+        <Deleter objectType={COMMENT_TYPE} id={comment.id}/>
+        <p>Author: {comment.author}</p>
+        <p>Body: {comment.body}</p>
+        <p>
+          Score: {comment.voteScore}
+          <Voter objectType={COMMENT_TYPE} id={comment.id}/>
+        </p>
+      </div>
     )
   }
 }
