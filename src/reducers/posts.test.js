@@ -140,7 +140,7 @@ describe('RECEIVE_POST tests', () => {
     })
   })
 
-  it('RECEIVE_POST should modify existing post', () => {
+  it('RECEIVE_POST should not modify existing post', () => {
     expect(reducer(
       {
         byId: {
@@ -157,6 +157,63 @@ describe('RECEIVE_POST tests', () => {
         allIds: ['post1'],
       },
       Actions.receivePost({
+          id: 'post1',
+          title: 'post1 new title',
+          body: 'post1 new body',
+          author: 'post1 new author',
+          category: 'category1',
+          deleted: false,
+        })
+      )
+    ).toEqual({
+      byId: {
+        post1: {
+          id: 'post1',
+          title: 'post1 original title',
+          body: 'post1 original body',
+          author: 'post1 original author',
+          category: 'category1',
+          deleted: false,
+          comments: [],
+        },
+      },
+      allIds: ['post1'],
+    })
+  })
+})
+
+describe('MODIFY_POST tests', () => {
+  it('MODIFY_POST should not process new posts', () => {
+    expect(reducer(initialTestState,
+      Actions.modifyPost({
+          id: 'post1',
+          title: 'post1 title',
+          body: 'post1 body',
+          author: 'post1 author',
+          category: 'category1',
+          deleted: false,
+        })
+      )
+    ).toEqual(initialTestState)
+  })
+
+  it('MODIFY_POST should modify existing post', () => {
+    expect(reducer(
+      {
+        byId: {
+          post1: {
+            id: 'post1',
+            title: 'post1 original title',
+            body: 'post1 original body',
+            author: 'post1 original author',
+            category: 'category1',
+            deleted: false,
+            comments: [],
+          },
+        },
+        allIds: ['post1'],
+      },
+      Actions.modifyPost({
           id: 'post1',
           title: 'post1 new title',
           body: 'post1 new body',

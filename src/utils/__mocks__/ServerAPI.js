@@ -20,6 +20,7 @@ const posts = [
     body: 'post1 body',
     author: 'post1 author',
     category: 'category1',
+    timestamp: 123456,
     deleted: false,
   },
   {
@@ -28,6 +29,7 @@ const posts = [
     body: 'post2 body',
     author: 'post2 author',
     category: 'category1',
+    timestamp: 123457,
     deleted: false,
   },
 ]
