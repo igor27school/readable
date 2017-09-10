@@ -27,19 +27,25 @@ class AllCategories extends Component {
     const { categories, posts } = this.props
     return (
       <div>
+        <h2>CATEGORIES</h2>
+        <ul>
+          {categories.map(category => (
+            <li key={category.path}>
+              <Link
+                to={`/${category.path}`}
+              >{category.name}</Link>
+            </li>
+          ))}
+        </ul>
+        <h2>POSTS</h2>
         <Sorter/>
-        <h2>Categories</h2>
-        {categories.map(category => (
-          <div key={category.path}>
-            <Link
-              to={`/${category.path}`}
-            >{category.name}</Link>
-          </div>
-        ))}
-        <h2>Posts</h2>
-        {posts.map(postId => (
-          <PostSummary key={postId} postId={postId}/>
-        ))}
+        <ul>
+          {posts.map(postId => (
+            <li key={postId}>
+              <PostSummary postId={postId}/>
+            </li>
+          ))}
+        </ul>
         <h4><Link to='/create'>New Post</Link></h4>
       </div>
     )

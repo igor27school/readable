@@ -16,7 +16,7 @@ class PostSummary extends Component {
     }
   }
   render() {
-    const { post, postId } = this.props
+    const { post, postId, numberComments } = this.props
     if (!post){
       return (
         <div>Invalid post id: {postId}</div>
@@ -28,22 +28,27 @@ class PostSummary extends Component {
     }
     return (
       <div>
-        <Deleter objectType={POST_TYPE} id={post.id}/>
         <Link to={`/edit/${post.id}`}>Edit</Link>
+        <Deleter objectType={POST_TYPE} id={post.id}/>
         <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
-        <span> Author: {post.author}</span>
-        <span> Score: {post.voteScore}</span>
-        <span> Number of comments: {post.comments.length}</span>
-        <Voter objectType={POST_TYPE} id={post.id}/>
+        <p> Category: {post.category} </p>
+        <p>Author: {post.author ? post.author : "Unknown"}</p>
+        <p>Time posted: {(new Date(post.timestamp)).toString()}</p>
+        <p>Number of comments: {numberComments}</p>
+        <p>
+          Score: {post.voteScore}
+          <Voter objectType={POST_TYPE} id={post.id}/>
+        </p>
       </div>
     )
   }
 }
 
-function mapStateToProps ({ posts }, { postId }) {
+function mapStateToProps ({ posts, comments }, { postId }) {
   return {
     post: posts.byId[postId],
     postId,
+    numberComments: (postId in posts.byId) ? posts.byId[postId].comments.map(commentId => comments.byId[commentId]).filter(comment => !comment.deleted).length : 0
   }
 }
 
