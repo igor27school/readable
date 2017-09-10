@@ -1,12 +1,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { fetchCategoriesFromServer, fetchCategoryPostsFromServer } from '../actions/ActionCreators'
 import { compare } from '../utils/Helper'
 import Sorter from './Sorter'
 import PostSummary from './PostSummary'
 
 class Category extends Component {
+  static propTypes = {
+    hasCategories: PropTypes.bool.isRequired,
+    category: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      posts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+      hasAllPosts: PropTypes.bool.isRequired,
+    }),
+    categoryPath: PropTypes.string.isRequired,
+    postIds: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    fetchCategoriesFromServer: PropTypes.func.isRequired,
+    fetchCategoryPostsFromServer: PropTypes.func.isRequired,
+  }
   componentDidMount() {
     const {
       hasCategories,
@@ -16,8 +30,13 @@ class Category extends Component {
       fetchCategoryPostsFromServer,
     } = this.props
     if (!hasCategories) {
-      // We need to fetch categories to know if the category provided is valid
-      fetchCategoriesFromServer().then(() => fetchCategoryPostsFromServer(categoryPath))
+      // We need to fetch categories validate the category provided
+      fetchCategoriesFromServer().then(categories => {
+        // Don't fetch posts if the category is invalid
+        if (categories.filter(category => category.path === categoryPath).length > 0) {
+          fetchCategoryPostsFromServer(categoryPath)
+        }
+      })
     } else if (category && !category.hasAllPosts) {
       this.props.fetchCategoryPostsFromServer(categoryPath)
     }
@@ -52,14 +71,14 @@ function mapStateToProps ({ sortOrder, categories, posts }, { match }) {
     hasCategories: categories.allIds.length > 0,
     category: categories.byId[match.params.category],
     categoryPath: match.params.category,
-    postIds: (match.params.category in categories.byId) ? categories.byId[match.params.category].posts.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id) : 0
+    postIds: (match.params.category in categories.byId) ? categories.byId[match.params.category].posts.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id) : []
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
     fetchCategoriesFromServer: () => dispatch(fetchCategoriesFromServer()),
-    fetchCategoryPostsFromServer: (categoryPath) => dispatch(fetchCategoryPostsFromServer(categoryPath)),
+    fetchCategoryPostsFromServer: categoryPath => dispatch(fetchCategoryPostsFromServer(categoryPath)),
   }
 }
 

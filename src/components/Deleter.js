@@ -1,8 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { COMMENT_TYPE, POST_TYPE } from '../constants/ObjectTypes'
 import { deleteObject } from '../actions/ActionCreators'
 
 class Deleter extends Component {
+  static propTypes = {
+    objectType: PropTypes.oneOf([COMMENT_TYPE, POST_TYPE]).isRequired,
+    id: PropTypes.string.isRequired,
+    deleteObject: PropTypes.func.isRequired,
+    history: PropTypes.object,
+  }
   handleClick = () => {
     const {objectType, id, deleteObject, history} = this.props
     deleteObject(objectType, id)

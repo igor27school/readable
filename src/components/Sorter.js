@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { reSort } from '../actions/ActionCreators'
 import { SORT_BY_SCORES, SORT_BY_TIMESTAMPS } from '../constants/SortOrders'
 
 class Sorter extends Component {
+  static propTypes = {
+    sortOrder: PropTypes.oneOf([SORT_BY_SCORES, SORT_BY_TIMESTAMPS]).isRequired,
+    reSort: PropTypes.func.isRequired,
+  }
   render() {
     return (
       <select

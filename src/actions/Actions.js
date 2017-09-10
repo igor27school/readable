@@ -10,6 +10,11 @@ export const modifyComment = comment => ({
   comment,
 })
 
+export const modifyPost = (post) => ({
+  type: types.MODIFY_POST,
+  post,
+})
+
 export const receiveAllPosts = posts => ({
   type: types.RECEIVE_ALL_POSTS,
   posts,

@@ -73,6 +73,11 @@ function categories(state=initialState, action) {
       }
     case ActionTypes.RECEIVE_POST:
       if (!(action.post.category in state.byId)) {
+        // Expected when loading post details directly
+        return state
+      }
+      if (state.byId[action.post.category].posts.includes(action.post.id)) {
+        console.warn('Receiving a post that is already included')
         return state
       }
       return {

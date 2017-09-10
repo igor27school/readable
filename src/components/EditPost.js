@@ -2,9 +2,20 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import serializeForm from 'form-serialize'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { fetchPostFromServer, editPost } from '../actions/ActionCreators'
 
 class EditPost extends Component {
+  static propTypes = {
+    post: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      body: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+      deleted: PropTypes.bool.isRequired,
+    }),
+    postId: PropTypes.string.isRequired,
+    fetchPostFromServer: PropTypes.func.isRequired,
+  }
   componentDidMount() {
     const { post, postId, fetchPostFromServer } = this.props
     if (!post) {

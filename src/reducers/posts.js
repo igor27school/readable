@@ -28,22 +28,9 @@ function posts(state=initialState, action) {
         }
       }, state)
     case ActionTypes.RECEIVE_POST:
-      if (!action.post.id) {
-        console.warn('Receiving post, but the post.id is undefined')
+      if (!action.post.id || (action.post.id in state.byId)) {
+        console.warn('Receiving post, but the post.id is undefined OR post already present')
         return state
-      }
-      if (action.post.id in state.byId) {
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [action.post.id]: {
-              ...state.byId[action.post.id],
-              // Passed values will override the existing values
-              ...action.post,
-            }
-          }
-        }
       }
       return {
         ...state,
@@ -56,6 +43,22 @@ function posts(state=initialState, action) {
           }
         },
         allIds: state.allIds.concat([action.post.id])
+      }
+    case ActionTypes.MODIFY_POST:
+      if (!action.post.id || !(action.post.id in state.byId)) {
+        console.warn('Modifying post, but the id is not found')
+        return state
+      }
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.id]: {
+            ...state.byId[action.post.id],
+            // Passed values will override the existing values
+            ...action.post,
+          }
+        }
       }
     case ActionTypes.RECEIVE_POST_COMMENTS:
       if (!(action.postId in state.byId)) {
@@ -75,7 +78,7 @@ function posts(state=initialState, action) {
       }
     case ActionTypes.RECEIVE_COMMENT:
       if (!(action.comment.parentId in state.byId)) {
-        console.warn('Receiving comment, but the postId is not found')
+        // This is expected to happen when user navigates to the comment editing or adding page directly
         return state
       }
       return {

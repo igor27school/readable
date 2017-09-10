@@ -2,20 +2,34 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import serializeForm from 'form-serialize'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { fetchCommentFromServer, editComment } from '../actions/ActionCreators'
 
 class EditComment extends Component {
+  static propTypes = {
+    comment: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      body: PropTypes.string.isRequired,
+      parentId: PropTypes.string.isRequired,
+      deleted: PropTypes.bool.isRequired,
+    }),
+    commentId: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    fetchCommentFromServer: PropTypes.func.isRequired,
+    editComment: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+  }
   componentDidMount() {
-    const { comment, commentId } = this.props
+    const { comment, commentId, fetchCommentFromServer } = this.props
     if (!comment) {
       fetchCommentFromServer(commentId)
     }
   }
   handleSubmit = (e) => {
     e.preventDefault()
-    const { comment, commentId, category } = this.props
+    const { comment, commentId, category, editComment } = this.props
     const values = serializeForm(e.target, { hash: true })
-    this.props.editComment(commentId, values)
+    editComment(commentId, values)
     this.props.history.push(`/${category}/${comment.parentId}`)
   }
   render() {
@@ -51,6 +65,7 @@ function mapStateToProps ({ comments }, { match }) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    fetchCommentFromServer: commentId => dispatch(fetchCommentFromServer(commentId)),
     editComment: (commentId, values) => dispatch(editComment(commentId, values)),
   }
 }

@@ -13,39 +13,6 @@ const headers = {
   'Authorization': token
 }
 
-export const getCategories = () =>
-  fetch(`${api}/categories`, { headers })
-    .then(res => res.json())
-    .then(data => data.categories)
-
-export const getAllPosts = () =>
-  fetch(`${api}/posts`, { headers })
-    .then(res => res.json())
-
-export const getCategoryPosts = categoryPath =>
-  fetch(`${api}/${categoryPath}/posts`, { headers })
-    .then(res => res.json())
-
-export const getPost = postId =>
-  fetch(`${api}/posts/${postId}`, { headers })
-    .then(res => res.json())
-
-export const getPostComments = postId =>
-  fetch(`${api}/posts/${postId}/comments`, { headers })
-    .then(res => res.json())
-
-export const sendVote = (componentType, id, voteType) => {
-  const component = componentType === POST_TYPE ? 'posts' : 'comments'
-  return fetch(`${api}/${component}/${id}`, {
-    method: 'POST',
-    headers: {
-      ...headers,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({option: voteType === VOTE_UP ? 'upVote' : 'downVote'})
-  }).then(res => res.json())
-}
-
 export const createComment = (comment) =>
   fetch(`${api}/comments`, {
     method: 'POST',
@@ -74,10 +41,6 @@ export const deleteObject = (objectType, id) => {
   })
 }
 
-export const getComment = commentId =>
-  fetch(`${api}/comments/${commentId}`, { headers })
-    .then(res => res.json())
-
 export const editComment = (commentId, comment) =>
   fetch(`${api}/comments/${commentId}`, {
     method: 'PUT',
@@ -97,3 +60,51 @@ export const editPost = (postId, post) =>
     },
     body: JSON.stringify(post)
   }).then(res => res.json())
+
+
+export const getAllPosts = () =>
+  fetch(`${api}/posts`, { headers })
+    .then(res => res.json())
+
+export const getCategories = () =>
+  fetch(`${api}/categories`, { headers })
+    .then(res => res.json())
+    .then(data => data.categories)
+
+export const getCategoryPosts = categoryPath =>
+  fetch(`${api}/${categoryPath}/posts`, { headers })
+    .then(res => res.json())
+
+export const getComment = commentId =>
+  fetch(`${api}/comments/${commentId}`, { headers })
+    .then(res => res.json()).then(res => {
+      if ('error' in res) {
+        throw new Error(`Fetching comment with id ${commentId} from server failed: ${res.error}`)
+      }
+      return res
+    })
+
+export const getPost = postId =>
+  fetch(`${api}/posts/${postId}`, { headers })
+    .then(res => res.json()).then(res => {
+      if ('error' in res) {
+        throw new Error(`Fetching post with id ${postId} from server failed: ${res.error}`)
+      }
+      return res
+    })
+
+export const getPostComments = postId =>
+  fetch(`${api}/posts/${postId}/comments`, { headers })
+    .then(res => res.json())
+
+export const sendVote = (componentType, id, voteType) => {
+  const component = componentType === POST_TYPE ? 'posts' : 'comments'
+  return fetch(`${api}/${component}/${id}`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({option: voteType === VOTE_UP ? 'upVote' : 'downVote'})
+  }).then(res => res.json())
+}

@@ -2,9 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import serializeForm from 'form-serialize'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { fetchCategoriesFromServer, createPost } from '../actions/ActionCreators'
 
 class CreatePost extends Component {
+  static propTypes = {
+    hasCategories: PropTypes.bool.isRequired,
+    fetchCategoriesFromServer: PropTypes.func.isRequired,
+  }
   componentDidMount() {
     const { hasCategories, fetchCategoriesFromServer } = this.props
     if (!hasCategories) {
@@ -14,7 +19,6 @@ class CreatePost extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const values = serializeForm(e.target, { hash: true })
-    console.log(values)
     // Basic form data validation
     if (values.category === 'none') {
       alert('Please fill out the category!')
@@ -63,7 +67,7 @@ function mapStateToProps ({ categories }) {
 function mapDispatchToProps (dispatch) {
   return {
     fetchCategoriesFromServer: () => dispatch(fetchCategoriesFromServer()),
-    createPost: (values) => dispatch(createPost(values)),
+    createPost: values => dispatch(createPost(values)),
   }
 }
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import {
   fetchCategoriesFromServer,
   fetchAllPostsFromServer,
@@ -10,6 +11,21 @@ import Sorter from './Sorter'
 import PostSummary from './PostSummary'
 
 class AllCategories extends Component {
+  static propTypes = {
+    hasCategories: PropTypes.bool.isRequired,
+    hasAllPosts: PropTypes.bool.isRequired,
+    categories: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        path: PropTypes.string.isRequired,
+        posts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+        hasAllPosts: PropTypes.bool.isRequired,
+      })
+    ).isRequired,
+    postIds: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    fetchCategoriesFromServer: PropTypes.func.isRequired,
+    fetchAllPostsFromServer: PropTypes.func.isRequired,
+  }
   componentDidMount() {
     const {
       hasCategories,
@@ -24,7 +40,7 @@ class AllCategories extends Component {
     }
   }
   render() {
-    const { categories, posts } = this.props
+    const { categories, postIds } = this.props
     return (
       <div>
         <h2>CATEGORIES</h2>
@@ -40,7 +56,7 @@ class AllCategories extends Component {
         <h2>POSTS</h2>
         <Sorter/>
         <ul>
-          {posts.map(postId => (
+          {postIds.map(postId => (
             <li key={postId}>
               <PostSummary postId={postId}/>
             </li>
@@ -57,7 +73,7 @@ function mapStateToProps ({ sortOrder, categories, posts }) {
     hasCategories: categories.allIds.length > 0,
     hasAllPosts: categories.hasAllPosts,
     categories: categories.allIds.map(category => categories.byId[category]),
-    posts: posts.allIds.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id),
+    postIds: posts.allIds.map(postId => posts.byId[postId]).filter(post => !post.deleted).sort(compare(sortOrder)).map(post => post.id),
   }
 }
 
