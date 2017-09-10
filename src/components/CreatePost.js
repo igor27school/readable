@@ -5,9 +5,17 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { fetchCategoriesFromServer, createPost } from '../actions/ActionCreators'
 
-class CreatePost extends Component {
+/**
+* @description The view for creating a new post.
+*/
+export class CreatePost extends Component {
   static propTypes = {
     hasCategories: PropTypes.bool.isRequired,
+    categories: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }).isRequired,
+    ).isRequired,
     fetchCategoriesFromServer: PropTypes.func.isRequired,
   }
   componentDidMount() {

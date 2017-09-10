@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { fetchPostFromServer, editPost } from '../actions/ActionCreators'
 
-class EditPost extends Component {
+/**
+* @description The view for editing a post.
+*/
+export class EditPost extends Component {
   static propTypes = {
     post: PropTypes.shape({
       id: PropTypes.string.isRequired,

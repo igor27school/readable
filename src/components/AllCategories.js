@@ -10,7 +10,10 @@ import { compare } from '../utils/Helper'
 import Sorter from './Sorter'
 import PostSummary from './PostSummary'
 
-class AllCategories extends Component {
+/**
+* @description The main view displaying all the existing categories and posts.
+*/
+export class AllCategories extends Component {
   static propTypes = {
     hasCategories: PropTypes.bool.isRequired,
     hasAllPosts: PropTypes.bool.isRequired,

@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AllCategories tests AllCategories matches the snapshot 1`] = `
+<div>
+  <h2>
+    CATEGORIES
+  </h2>
+  <ul>
+    <li>
+      <Link
+        replace={false}
+        to="/category1"
+      >
+        category1
+      </Link>
+    </li>
+    <li>
+      <Link
+        replace={false}
+        to="/category2"
+      >
+        category2
+      </Link>
+    </li>
+  </ul>
+  <h2>
+    POSTS
+  </h2>
+  <Connect(Sorter) />
+  <ul>
+    <li>
+      <Connect(PostSummary)
+        postId="post1"
+      />
+    </li>
+    <li>
+      <Connect(PostSummary)
+        postId="post2"
+      />
+    </li>
+  </ul>
+  <h4>
+    <Link
+      replace={false}
+      to="/create"
+    >
+      New Post
+    </Link>
+  </h4>
+</div>
+`;

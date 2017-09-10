@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditComment tests EditComment matches the snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/testCategory/testPostId"
+  >
+    Close
+  </Link>
+  <form
+    onSubmit={[Function]}
+  >
+    <textarea
+      defaultValue="testing adding comment"
+      name="body"
+    />
+    <button>
+      Submit Edits
+    </button>
+  </form>
+</div>
+`;

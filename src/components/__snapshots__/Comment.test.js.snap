@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Comment tests Comment matches the snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/edit/testCategory/testId"
+  >
+    Edit
+  </Link>
+  <Connect(Deleter)
+    id="testId"
+    objectType="COMMENT_TYPE"
+  />
+  <p>
+    Body: 
+    test body
+  </p>
+  <p>
+    Author: 
+    test author
+  </p>
+  <p>
+    Last modified: 
+    Wed Dec 31 1969 16:00:01 GMT-0800 (PST)
+  </p>
+  <p>
+    Score: 
+    2
+    <Connect(Voter)
+      id="testId"
+      objectType="COMMENT_TYPE"
+    />
+  </p>
+</div>
+`;

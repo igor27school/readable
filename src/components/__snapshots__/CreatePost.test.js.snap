@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreatePost tests CreatePost matches the snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/"
+  >
+    Close
+  </Link>
+  <form
+    onSubmit={[Function]}
+  >
+    <input
+      name="title"
+      placeholder="Title"
+      type="text"
+    />
+    <input
+      name="author"
+      placeholder="Author"
+      type="text"
+    />
+    <textarea
+      name="body"
+      placeholder="Body"
+    />
+    <select
+      defaultValue="none"
+      name="category"
+    >
+      <option
+        disabled={true}
+        value="none"
+      >
+        Select category
+      </option>
+      <option
+        value="category1"
+      >
+        category1
+      </option>
+      <option
+        value="category2"
+      >
+        category2
+      </option>
+    </select>
+    <button>
+      Publish
+    </button>
+  </form>
+</div>
+`;

@@ -7,7 +7,10 @@ import { fetchPostFromServer, fetchPostCommentsFromServer } from '../actions/Act
 import Voter from './Voter'
 import Deleter from './Deleter'
 
-class PostSummary extends Component {
+/**
+* @description This component is used in AllCategories and Category views. It displays the information releavant to a particular post, including the number of comments the post has.
+*/
+export class PostSummary extends Component {
   static propTypes = {
     post: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -46,9 +49,11 @@ class PostSummary extends Component {
     }
     return (
       <div>
-        <Link to={`/edit/${post.id}`}>Edit</Link>
-        <Deleter objectType={POST_TYPE} id={post.id}/>
         <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
+        <p>
+          <Link to={`/edit/${post.id}`}>Edit</Link>
+          <Deleter objectType={POST_TYPE} id={post.id}/>
+        </p>
         <p> Category: {post.category} </p>
         <p>Author: {post.author ? post.author : 'Unknown'}</p>
         <p>Time posted: {(new Date(post.timestamp)).toString()}</p>

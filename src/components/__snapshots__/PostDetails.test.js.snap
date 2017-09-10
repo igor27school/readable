@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostDetails tests PostDetails matches the snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/edit/testPostId"
+  >
+    Edit Post
+  </Link>
+  <Connect(Deleter)
+    history={Object {}}
+    id="testPostId"
+    objectType="POST_TYPE"
+  />
+  <h2>
+    Test Post Title
+  </h2>
+  <h3>
+    Content: 
+    testing PostDetails
+  </h3>
+  <h3>
+    Author: 
+    Test Post Author
+  </h3>
+  <h3>
+    Time posted: 
+    Wed Dec 31 1969 16:00:01 GMT-0800 (PST)
+  </h3>
+  <h3>
+    Number of comments: 
+    2
+  </h3>
+  <h3>
+    Score: 
+    <Connect(Voter)
+      id="testPostId"
+      objectType="POST_TYPE"
+    />
+  </h3>
+  <h2>
+    COMMENTS
+  </h2>
+  <Connect(Sorter) />
+  <ul>
+    <li>
+      <Connect(Comment)
+        category="testCategory"
+        commentId="testComment1"
+      />
+    </li>
+    <li>
+      <Connect(Comment)
+        category="testCategory"
+        commentId="testComment2"
+      />
+    </li>
+  </ul>
+  <h4>
+    <Link
+      replace={false}
+      to="/create/testCategory/testPostId"
+    >
+      New Comment
+    </Link>
+  </h4>
+  <h4>
+    <Link
+      replace={false}
+      to="/testCategory"
+    >
+      View 
+      testCategory
+       Category
+    </Link>
+  </h4>
+  <h4>
+    <Link
+      replace={false}
+      to="/"
+    >
+      View All Categories
+    </Link>
+  </h4>
+</div>
+`;

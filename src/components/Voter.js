@@ -5,7 +5,10 @@ import { VOTE_UP, VOTE_DOWN } from '../constants/VoteTypes'
 import { COMMENT_TYPE, POST_TYPE } from '../constants/ObjectTypes'
 import { vote } from '../actions/ActionCreators'
 
-class Voter extends Component {
+/**
+* @description This component is used in AllCategories, Category and PostDetails views. It allows the user to vote on the posts and comments.
+*/
+export class Voter extends Component {
   static propTypes = {
     objectType: PropTypes.oneOf([COMMENT_TYPE, POST_TYPE]).isRequired,
     id: PropTypes.string.isRequired,

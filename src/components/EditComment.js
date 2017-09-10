@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { fetchCommentFromServer, editComment } from '../actions/ActionCreators'
 
-class EditComment extends Component {
+/**
+* @description The view for editing a comment for a given post.
+*/
+export class EditComment extends Component {
   static propTypes = {
     comment: PropTypes.shape({
       id: PropTypes.string.isRequired,

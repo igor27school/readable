@@ -10,7 +10,10 @@ import Voter from './Voter'
 import Comment from './Comment'
 import Deleter from './Deleter'
 
-class PostDetails extends Component {
+/**
+* @description The view for displaying post details as well as post's comments.
+*/
+export class PostDetails extends Component {
   static propTypes = {
     post: PropTypes.shape({
       id: PropTypes.string.isRequired,

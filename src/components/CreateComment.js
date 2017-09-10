@@ -5,9 +5,18 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { createComment } from '../actions/ActionCreators'
 
-class CreateComment extends Component {
+/**
+* @description The view for creating a new comment associated with the given post.
+*/
+export class CreateComment extends Component {
   static propTypes = {
     createComment: PropTypes.func.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+          category: PropTypes.string.isRequired,
+          parent_id: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
   }
   handleSubmit = (e) => {
     e.preventDefault()

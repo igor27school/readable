@@ -7,13 +7,13 @@ import store from '../store'
 
 jest.mock('../utils/ServerAPI')
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
+test('renders without crashing', () => {
+  const div = document.createElement('div')
   ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>,
-    div);
-});
+    div)
+})

@@ -7,7 +7,10 @@ import { compare } from '../utils/Helper'
 import Sorter from './Sorter'
 import PostSummary from './PostSummary'
 
-class Category extends Component {
+/**
+* @description Category view displaying all of the posts in the provided category.
+*/
+export class Category extends Component {
   static propTypes = {
     hasCategories: PropTypes.bool.isRequired,
     category: PropTypes.shape({

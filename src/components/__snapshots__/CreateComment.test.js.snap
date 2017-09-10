@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateComment tests CreateComment matches the snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/testCategory/testPostId"
+  >
+    Close
+  </Link>
+  <form
+    onSubmit={[Function]}
+  >
+    <input
+      name="author"
+      placeholder="Author"
+      type="text"
+    />
+    <textarea
+      name="body"
+      placeholder="Body"
+    />
+    <button>
+      Publish
+    </button>
+  </form>
+</div>
+`;

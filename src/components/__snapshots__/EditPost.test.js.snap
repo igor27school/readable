@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditPost tests EditPost matches the snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/testCategory/testPostId"
+  >
+    Close
+  </Link>
+  <form
+    onSubmit={[Function]}
+  >
+    <input
+      defaultValue={undefined}
+      name="title"
+      type="text"
+    />
+    <textarea
+      defaultValue="testing edit post"
+      name="body"
+    />
+    <button>
+      Submit Edits
+    </button>
+  </form>
+</div>
+`;

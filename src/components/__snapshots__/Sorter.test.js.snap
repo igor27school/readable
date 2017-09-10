@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sorter tests Sorter matches the snapshot 1`] = `
+<select
+  defaultValue="SORT_BY_TIMESTAMPS"
+  onChange={[Function]}
+>
+  <option
+    value="SORT_BY_SCORES"
+  >
+    Sort by highest score
+  </option>
+  <option
+    value="SORT_BY_TIMESTAMPS"
+  >
+    Sort by most recent
+  </option>
+</select>
+`;

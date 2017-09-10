@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostSummary tests PostSummary matches the snapshot 1`] = `
+<div>
+  <Link
+    replace={false}
+    to="/testCategory/testPostId"
+  >
+    Test Post Title
+  </Link>
+  <p>
+    <Link
+      replace={false}
+      to="/edit/testPostId"
+    >
+      Edit
+    </Link>
+    <Connect(Deleter)
+      id="testPostId"
+      objectType="POST_TYPE"
+    />
+  </p>
+  <p>
+     Category: 
+    testCategory
+     
+  </p>
+  <p>
+    Author: 
+    Test Post Author
+  </p>
+  <p>
+    Time posted: 
+    Wed Dec 31 1969 16:00:01 GMT-0800 (PST)
+  </p>
+  <p>
+    Number of comments: 
+    2
+  </p>
+  <p>
+    Score: 
+    <Connect(Voter)
+      id="testPostId"
+      objectType="POST_TYPE"
+    />
+  </p>
+</div>
+`;

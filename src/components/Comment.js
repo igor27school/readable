@@ -6,7 +6,10 @@ import { COMMENT_TYPE } from '../constants/ObjectTypes'
 import Voter from './Voter'
 import Deleter from './Deleter'
 
-class Comment extends Component {
+/**
+* @description This component is used in the PostDetails view. It displays the information releavant to a particular comment made on the given post.
+*/
+export class Comment extends Component {
   static propTypes = {
     comment: PropTypes.shape({
       id: PropTypes.string.isRequired,
