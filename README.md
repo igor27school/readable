@@ -8,9 +8,7 @@ This project uses React with Redux. To work properly, it relies on the server-si
 
 ## Installation
 
-If you have [yarn](https://yarnpkg.com/), you can start this project (as well as the server-side project) by executing `yarn start` in the command line.
-
-This project can also be started using `npm install` followed by `npm start`.
+This project can be started using `npm install` followed by `npm start`.
 
 NOTE: This project only has support for localhost preview. It also has **ZERO** styling.
 
